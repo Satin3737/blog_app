@@ -1,5 +1,5 @@
 import 'package:blog_app/core/router/routes.dart';
-import 'package:blog_app/core/theme/lib/core/theme/app_pallet.dart';
+import 'package:blog_app/core/theme/app_pallet.dart';
 import 'package:blog_app/features/auth/ui/widgets/auth_button.dart';
 import 'package:blog_app/features/auth/ui/widgets/auth_field.dart';
 import 'package:flutter/gestures.dart';

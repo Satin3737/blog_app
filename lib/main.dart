@@ -1,5 +1,5 @@
 import 'package:blog_app/core/router/app_router.dart';
-import 'package:blog_app/core/theme/lib/core/theme/theme.dart';
+import 'package:blog_app/core/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(const MyApp());

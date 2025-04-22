@@ -1,4 +1,4 @@
-import 'package:blog_app/core/theme/lib/core/theme/app_pallet.dart';
+import 'package:blog_app/core/theme/app_pallet.dart';
 import 'package:flutter/material.dart';
 
 class AppTheme {
@@ -8,6 +8,7 @@ class AppTheme {
   );
 
   static final darkTheme = ThemeData.dark().copyWith(
+    appBarTheme: const AppBarTheme(backgroundColor: AppPallet.background),
     scaffoldBackgroundColor: AppPallet.background,
     inputDecorationTheme: InputDecorationTheme(
       contentPadding: const EdgeInsets.all(24),
