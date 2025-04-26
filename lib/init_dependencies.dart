@@ -25,11 +25,15 @@ Future<void> _initSupabase() async {
 }
 
 void _initAuth() {
-  sl.registerFactory<AuthRemoteSource>(() => AuthRemoteSourceImpl(sl()));
-  sl.registerFactory<AuthRepository>(() => AuthRepositoryImpl(sl()));
-  sl.registerFactory<UserSignUp>(() => UserSignUp(sl()));
-  sl.registerFactory<UserSignIn>(() => UserSignIn(sl()));
-  sl.registerLazySingleton<AuthBloc>(
-    () => AuthBloc(userSignUp: sl(), userSignIn: sl()),
-  );
+  sl
+    // repository
+    ..registerFactory<AuthRemoteSource>(() => AuthRemoteSourceImpl(sl()))
+    ..registerFactory<AuthRepository>(() => AuthRepositoryImpl(sl()))
+    // usecases
+    ..registerFactory<UserSignUp>(() => UserSignUp(sl()))
+    ..registerFactory<UserSignIn>(() => UserSignIn(sl()))
+    // bloc
+    ..registerLazySingleton<AuthBloc>(
+      () => AuthBloc(userSignUp: sl(), userSignIn: sl()),
+    );
 }
