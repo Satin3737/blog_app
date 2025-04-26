@@ -26,27 +26,41 @@ class AuthRemoteSourceImpl implements AuthRemoteSource {
     required String email,
     required String password,
   }) async {
-    try {
-      final response = await supabaseClient.auth.signUp(
+    return _fetchUser(
+      () async => await supabaseClient.auth.signUp(
         email: email,
         password: password,
         data: {'name': name},
-      );
-
-      if (response.user == null) throw ServerException('User not found');
-
-      return UserModel.fromJson(response.user!.toJson());
-    } catch (e) {
-      throw ServerException(e.toString());
-    }
+      ),
+    );
   }
 
   @override
   Future<UserModel> signInWithEmailAndPassword({
     required String email,
     required String password,
-  }) {
-    // TODO: implement signInWithEmailAndPassword
-    throw UnimplementedError();
+  }) async {
+    return _fetchUser(
+      () async => await supabaseClient.auth.signInWithPassword(
+        email: email,
+        password: password,
+      ),
+    );
+  }
+
+  Future<UserModel> _fetchUser(
+    Future<AuthResponse> Function() userRequest,
+  ) async {
+    try {
+      final response = await userRequest();
+
+      if (response.user == null) throw ServerException('User not found');
+
+      return UserModel.fromJson(response.user!.toJson());
+    } on AuthException catch (e) {
+      throw ServerException(e.message);
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
   }
 }
