@@ -23,3 +23,5 @@ final class AuthSignIn extends AuthEvent {
 
   const AuthSignIn({required this.email, required this.password});
 }
+
+class AuthIsCurrentUser extends AuthEvent {}
