@@ -1,14 +1,11 @@
 import 'package:blog_app/core/common/widgets/loader.dart';
-import 'package:blog_app/core/router/routes.dart';
-import 'package:blog_app/core/theme/app_pallet.dart';
 import 'package:blog_app/core/utils/show_snackbar.dart';
 import 'package:blog_app/features/auth/ui/bloc/auth_bloc.dart';
 import 'package:blog_app/features/auth/ui/widgets/auth_button.dart';
 import 'package:blog_app/features/auth/ui/widgets/auth_field.dart';
-import 'package:flutter/gestures.dart';
+import 'package:blog_app/features/auth/ui/widgets/auth_sub_action.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -88,24 +85,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           AuthButton(label: 'Sign Up', onPressed: onSubmit),
                         ],
                       ),
-                      RichText(
-                        text: TextSpan(
-                          text: 'Already have an account? ',
-                          style: Theme.of(context).textTheme.titleMedium,
-                          children: [
-                            TextSpan(
-                              text: 'Sign In',
-                              style: TextStyle(
-                                color: AppPallet.gradient2,
-                                fontWeight: FontWeight.w700,
-                              ),
-                              recognizer:
-                                  TapGestureRecognizer()
-                                    ..onTap = () => context.go(Routes.signIn),
-                            ),
-                          ],
-                        ),
-                      ),
+                      AuthSubAction(isSignUp: true),
                     ],
                   ),
                 );
