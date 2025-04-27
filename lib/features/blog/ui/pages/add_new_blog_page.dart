@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:blog_app/core/theme/app_pallet.dart';
+import 'package:blog_app/core/utils/pick_image.dart';
 import 'package:blog_app/features/blog/ui/widgets/blog_field.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
@@ -25,14 +28,20 @@ class _AddNewBlogPageState extends State<AddNewBlogPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _contentController = TextEditingController();
-  List<String> selectedTopics = [];
+  final List<String> _selectedTopics = [];
+  File? _selectedImage;
+
+  void onImageSelect() async {
+    final image = await pickImageFromGallery();
+    if (image != null) setState(() => _selectedImage = image);
+  }
 
   void onChipTap(String topic) {
     setState(() {
-      if (selectedTopics.contains(topic)) {
-        selectedTopics.remove(topic);
+      if (_selectedTopics.contains(topic)) {
+        _selectedTopics.remove(topic);
       } else {
-        selectedTopics.add(topic);
+        _selectedTopics.add(topic);
       }
     });
   }
@@ -60,22 +69,39 @@ class _AddNewBlogPageState extends State<AddNewBlogPage> {
           child: Column(
             spacing: 24,
             children: [
-              DottedBorder(
-                color: AppPallet.border,
-                dashPattern: [16, 8],
-                radius: const Radius.circular(12),
-                borderType: BorderType.RRect,
-                strokeCap: StrokeCap.round,
-                child: const AspectRatio(
+              GestureDetector(
+                onTap: onImageSelect,
+                child: AspectRatio(
                   aspectRatio: 16 / 9,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    spacing: 16,
-                    children: [
-                      Icon(Icons.folder_open, size: 48),
-                      Text('Select your image', style: TextStyle(fontSize: 16)),
-                    ],
-                  ),
+                  child:
+                      _selectedImage == null
+                          ? DottedBorder(
+                            color: AppPallet.border,
+                            dashPattern: [16, 8],
+                            radius: const Radius.circular(12),
+                            borderType: BorderType.RRect,
+                            strokeCap: StrokeCap.round,
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                spacing: 16,
+                                children: [
+                                  Icon(Icons.folder_open, size: 48),
+                                  Text(
+                                    'Select your image',
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
+                          : ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: Image.file(
+                              _selectedImage!,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                 ),
               ),
               SizedBox(
@@ -86,7 +112,7 @@ class _AddNewBlogPageState extends State<AddNewBlogPage> {
                   separatorBuilder: (context, index) => SizedBox(width: 8),
                   itemBuilder: (context, index) {
                     final topic = topics[index];
-                    final isSelected = selectedTopics.contains(topic);
+                    final isSelected = _selectedTopics.contains(topic);
 
                     return GestureDetector(
                       onTap: () => onChipTap(topic),
