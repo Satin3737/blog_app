@@ -1,3 +1,4 @@
+import 'package:blog_app/core/common/widgets/loader.dart';
 import 'package:blog_app/core/router/routes.dart';
 import 'package:blog_app/core/theme/app_pallet.dart';
 import 'package:blog_app/core/utils/show_snackbar.dart';
@@ -46,59 +47,62 @@ class _SignInPageState extends State<SignInPage> {
         child: Center(
           child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(vertical: 48, horizontal: 16),
-            child: BlocListener<AuthBloc, AuthState>(
+            child: BlocConsumer<AuthBloc, AuthState>(
               listener: (context, state) {
                 if (state is AuthFailure) showSnackBar(context, state.message);
               },
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  spacing: 24,
-                  children: [
-                    const Text(
-                      'Sign In',
-                      style: TextStyle(
-                        fontSize: 50,
-                        fontWeight: FontWeight.w700,
+              builder: (context, state) {
+                if (state is AuthCurrentUserLoading) return const Loader();
+                return Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    spacing: 24,
+                    children: [
+                      const Text(
+                        'Sign In',
+                        style: TextStyle(
+                          fontSize: 50,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
-                    ),
-                    Column(
-                      spacing: 16,
-                      children: [
-                        AuthField(
-                          hintText: 'Email',
-                          controller: _emailController,
-                        ),
-                        AuthField(
-                          hintText: 'Password',
-                          controller: _passwordController,
-                          isPassword: true,
-                        ),
-                        AuthButton(label: 'Sign In', onPressed: onSubmit),
-                      ],
-                    ),
-                    RichText(
-                      text: TextSpan(
-                        text: 'Don\'t have an account? ',
-                        style: Theme.of(context).textTheme.titleMedium,
+                      Column(
+                        spacing: 16,
                         children: [
-                          TextSpan(
-                            text: 'Sign Up',
-                            style: TextStyle(
-                              color: AppPallet.gradient2,
-                              fontWeight: FontWeight.w700,
-                            ),
-                            recognizer:
-                                TapGestureRecognizer()
-                                  ..onTap = () => context.go(Routes.signUp),
+                          AuthField(
+                            hintText: 'Email',
+                            controller: _emailController,
                           ),
+                          AuthField(
+                            hintText: 'Password',
+                            controller: _passwordController,
+                            isPassword: true,
+                          ),
+                          AuthButton(label: 'Sign In', onPressed: onSubmit),
                         ],
                       ),
-                    ),
-                  ],
-                ),
-              ),
+                      RichText(
+                        text: TextSpan(
+                          text: 'Don\'t have an account? ',
+                          style: Theme.of(context).textTheme.titleMedium,
+                          children: [
+                            TextSpan(
+                              text: 'Sign Up',
+                              style: TextStyle(
+                                color: AppPallet.gradient2,
+                                fontWeight: FontWeight.w700,
+                              ),
+                              recognizer:
+                                  TapGestureRecognizer()
+                                    ..onTap = () => context.go(Routes.signUp),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
             ),
           ),
         ),

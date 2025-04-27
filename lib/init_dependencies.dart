@@ -1,3 +1,4 @@
+import 'package:blog_app/core/common/cubits/user/app_user_cubit.dart';
 import 'package:blog_app/core/secrets/app_secrets.dart';
 import 'package:blog_app/features/auth/data/repository/auth_repository_impl.dart';
 import 'package:blog_app/features/auth/data/sources/auth_remote_source.dart';
@@ -13,6 +14,7 @@ final GetIt sl = GetIt.instance;
 
 Future<void> initDependencies() async {
   await _initSupabase();
+  _initCore();
   _initAuth();
 }
 
@@ -23,6 +25,10 @@ Future<void> _initSupabase() async {
   );
 
   sl.registerLazySingleton(() => supabase.client);
+}
+
+void _initCore() {
+  sl.registerLazySingleton<AppUserCubit>(() => AppUserCubit());
 }
 
 void _initAuth() {
@@ -36,6 +42,11 @@ void _initAuth() {
     ..registerFactory<CurrentUser>(() => CurrentUser(sl()))
     // bloc
     ..registerLazySingleton<AuthBloc>(
-      () => AuthBloc(userSignUp: sl(), userSignIn: sl(), currentUser: sl()),
+      () => AuthBloc(
+        userSignUp: sl(),
+        userSignIn: sl(),
+        currentUser: sl(),
+        appUserCubit: sl(),
+      ),
     );
 }
