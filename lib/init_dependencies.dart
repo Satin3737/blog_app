@@ -7,6 +7,11 @@ import 'package:blog_app/features/auth/domain/usecases/current_user.dart';
 import 'package:blog_app/features/auth/domain/usecases/user_signin.dart';
 import 'package:blog_app/features/auth/domain/usecases/user_signup.dart';
 import 'package:blog_app/features/auth/ui/bloc/auth_bloc.dart';
+import 'package:blog_app/features/blog/data/repository/blog_repository_impl.dart';
+import 'package:blog_app/features/blog/data/sources/blog_remote_source.dart';
+import 'package:blog_app/features/blog/domain/repository/blog_repository.dart';
+import 'package:blog_app/features/blog/domain/usecases/blog_upload.dart';
+import 'package:blog_app/features/blog/ui/bloc/blog_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -16,6 +21,7 @@ Future<void> initDependencies() async {
   await _initSupabase();
   _initCore();
   _initAuth();
+  _initBlog();
 }
 
 Future<void> _initSupabase() async {
@@ -49,4 +55,15 @@ void _initAuth() {
         appUserCubit: sl(),
       ),
     );
+}
+
+void _initBlog() {
+  sl
+    // repository
+    ..registerFactory<BlogRemoteSource>(() => BlogRemoteSourceImpl(sl()))
+    ..registerFactory<BlogRepository>(() => BlogRepositoryImpl(sl()))
+    // usecases
+    ..registerFactory<BlogUpload>(() => BlogUpload(sl()))
+    // bloc
+    ..registerLazySingleton<BlogBloc>(() => BlogBloc(blogUpload: sl()));
 }
