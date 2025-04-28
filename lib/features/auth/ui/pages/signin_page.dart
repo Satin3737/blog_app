@@ -19,6 +19,17 @@ class _SignInPageState extends State<SignInPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  void _onSubmit() {
+    if (_formKey.currentState!.validate()) {
+      context.read<AuthBloc>().add(
+        AuthSignIn(
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim(),
+        ),
+      );
+    }
+  }
+
   @override
   void dispose() {
     _emailController.dispose();
@@ -28,17 +39,6 @@ class _SignInPageState extends State<SignInPage> {
 
   @override
   Widget build(BuildContext context) {
-    void onSubmit() {
-      if (_formKey.currentState!.validate()) {
-        context.read<AuthBloc>().add(
-          AuthSignIn(
-            email: _emailController.text.trim(),
-            password: _passwordController.text.trim(),
-          ),
-        );
-      }
-    }
-
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -75,7 +75,7 @@ class _SignInPageState extends State<SignInPage> {
                             controller: _passwordController,
                             isPassword: true,
                           ),
-                          AuthButton(label: 'Sign In', onPressed: onSubmit),
+                          AuthButton(label: 'Sign In', onPressed: _onSubmit),
                         ],
                       ),
                       AuthSubAction(isSignUp: false),

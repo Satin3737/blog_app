@@ -20,6 +20,18 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  void _onSubmit() {
+    if (_formKey.currentState!.validate()) {
+      context.read<AuthBloc>().add(
+        AuthSignUp(
+          name: _nameController.text.trim(),
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim(),
+        ),
+      );
+    }
+  }
+
   @override
   void dispose() {
     _nameController.dispose();
@@ -30,18 +42,6 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
-    void onSubmit() {
-      if (_formKey.currentState!.validate()) {
-        context.read<AuthBloc>().add(
-          AuthSignUp(
-            name: _nameController.text.trim(),
-            email: _emailController.text.trim(),
-            password: _passwordController.text.trim(),
-          ),
-        );
-      }
-    }
-
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -82,7 +82,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             controller: _passwordController,
                             isPassword: true,
                           ),
-                          AuthButton(label: 'Sign Up', onPressed: onSubmit),
+                          AuthButton(label: 'Sign Up', onPressed: _onSubmit),
                         ],
                       ),
                       AuthSubAction(isSignUp: true),
