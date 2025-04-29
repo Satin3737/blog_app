@@ -15,4 +15,10 @@ final class BlogFailure extends BlogState {
   const BlogFailure(this.message);
 }
 
-final class BlogSuccess extends BlogState {}
+final class BlogUploadSuccess extends BlogState {}
+
+final class BlogFetchAllBlogsSuccess extends BlogState {
+  final List<Blog> blogs;
+
+  const BlogFetchAllBlogsSuccess(this.blogs);
+}

@@ -5,6 +5,8 @@ import 'package:blog_app/features/blog/data/models/blog_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 abstract interface class BlogRemoteSource {
+  Future<List<BlogModel>> fetchAllBlogs();
+
   Future<BlogModel> uploadBlog(BlogModel blog);
 
   Future<String> uploadBlogImage({
@@ -17,6 +19,27 @@ class BlogRemoteSourceImpl implements BlogRemoteSource {
   final SupabaseClient supabaseClient;
 
   const BlogRemoteSourceImpl(this.supabaseClient);
+
+  @override
+  Future<List<BlogModel>> fetchAllBlogs() async {
+    try {
+      final blogsData = await supabaseClient
+          .from('blogs')
+          .select('*, users (name)');
+
+      return blogsData
+          .map(
+            (blog) => BlogModel.fromJson(
+              blog,
+            ).copyWith(authorName: blog['users']['name']),
+          )
+          .toList();
+    } on PostgrestException catch (e) {
+      throw ServerException(e.message);
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
+  }
 
   @override
   Future<BlogModel> uploadBlog(BlogModel blog) async {

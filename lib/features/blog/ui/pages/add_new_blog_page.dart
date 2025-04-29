@@ -94,7 +94,7 @@ class _AddNewBlogPageState extends State<AddNewBlogPage> {
         child: BlocConsumer<BlogBloc, BlogState>(
           listener: (context, state) {
             if (state is BlogFailure) showSnackBar(context, state.message);
-            if (state is BlogSuccess) {
+            if (state is BlogUploadSuccess) {
               showSnackBar(
                 context,
                 'Blog uploaded successfully',

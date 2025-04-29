@@ -5,6 +5,10 @@ sealed class BlogEvent {
   const BlogEvent();
 }
 
+final class BlogFetchedAllBlogs extends BlogEvent {
+  const BlogFetchedAllBlogs();
+}
+
 final class BlogUploaded extends BlogEvent {
   final String title;
   final String content;
