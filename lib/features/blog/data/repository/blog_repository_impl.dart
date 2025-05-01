@@ -16,9 +16,9 @@ class BlogRepositoryImpl implements BlogRepository {
   const BlogRepositoryImpl(this.blogRemoteSource);
 
   @override
-  Future<Either<Failure, List<Blog>>> fetchAllBlogs() async {
+  Future<Either<Failure, List<Blog>>> fetchBlogList() async {
     try {
-      final blogs = await blogRemoteSource.fetchAllBlogs();
+      final blogs = await blogRemoteSource.fetchBlogList();
       return Right(blogs);
     } on PostgrestException catch (e) {
       return Left(Failure(e.message));

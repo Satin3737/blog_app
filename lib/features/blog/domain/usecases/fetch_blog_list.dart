@@ -4,13 +4,13 @@ import 'package:blog_app/features/blog/domain/entities/blog.dart';
 import 'package:blog_app/features/blog/domain/repository/blog_repository.dart';
 import 'package:fpdart/fpdart.dart';
 
-class FetchAllBlogs implements UseCase<List<Blog>, NoParams> {
+class FetchBlogList implements UseCase<List<Blog>, NoParams> {
   final BlogRepository blogRepository;
 
-  const FetchAllBlogs(this.blogRepository);
+  const FetchBlogList(this.blogRepository);
 
   @override
   Future<Either<Failure, List<Blog>>> call(NoParams params) async {
-    return await blogRepository.fetchAllBlogs();
+    return await blogRepository.fetchBlogList();
   }
 }

@@ -3,11 +3,10 @@ import 'dart:io';
 import 'package:blog_app/core/common/cubits/user/app_user_cubit.dart';
 import 'package:blog_app/core/common/widgets/loader.dart';
 import 'package:blog_app/core/constants/topics.dart';
-import 'package:blog_app/core/router/routes.dart';
 import 'package:blog_app/core/theme/app_pallet.dart';
 import 'package:blog_app/core/utils/pick_image.dart';
 import 'package:blog_app/core/utils/show_snackbar.dart';
-import 'package:blog_app/features/blog/ui/bloc/blog_bloc.dart';
+import 'package:blog_app/features/blog/ui/bloc/blog_upload/blog_upload_bloc.dart';
 import 'package:blog_app/features/blog/ui/widgets/blog_field.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
@@ -59,7 +58,7 @@ class _AddNewBlogPageState extends State<AddNewBlogPage> {
     final authorId =
         (context.read<AppUserCubit>().state as AppUserLoggedIn).user.id;
 
-    context.read<BlogBloc>().add(
+    context.read<BlogUploadBloc>().add(
       BlogUploaded(
         image: _selectedImage!,
         title: _titleController.text.trim(),
@@ -91,16 +90,18 @@ class _AddNewBlogPageState extends State<AddNewBlogPage> {
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16),
-        child: BlocConsumer<BlogBloc, BlogState>(
+        child: BlocConsumer<BlogUploadBloc, BlogUploadState>(
           listener: (context, state) {
-            if (state is BlogFailure) showSnackBar(context, state.message);
+            if (state is BlogUploadFailure) {
+              showSnackBar(context, state.message);
+            }
             if (state is BlogUploadSuccess) {
               showSnackBar(
                 context,
                 'Blog uploaded successfully',
                 SnackBarType.success,
               );
-              context.go(Routes.blog);
+              context.pop();
             }
           },
           builder: (context, state) {
@@ -188,7 +189,7 @@ class _AddNewBlogPageState extends State<AddNewBlogPage> {
                       ),
                     ],
                   ),
-                  if (state is BlogLoading) const Loader(),
+                  if (state is BlogUploadLoading) const Loader(),
                 ],
               ),
             );

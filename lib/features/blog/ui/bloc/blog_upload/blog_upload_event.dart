@@ -1,15 +1,11 @@
-part of 'blog_bloc.dart';
+part of 'blog_upload_bloc.dart';
 
 @immutable
-sealed class BlogEvent {
-  const BlogEvent();
+sealed class BlogUploadEvent {
+  const BlogUploadEvent();
 }
 
-final class BlogFetchedAllBlogs extends BlogEvent {
-  const BlogFetchedAllBlogs();
-}
-
-final class BlogUploaded extends BlogEvent {
+final class BlogUploaded extends BlogUploadEvent {
   final String title;
   final String content;
   final File image;

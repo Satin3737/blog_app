@@ -5,7 +5,7 @@ import 'package:blog_app/features/blog/data/models/blog_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 abstract interface class BlogRemoteSource {
-  Future<List<BlogModel>> fetchAllBlogs();
+  Future<List<BlogModel>> fetchBlogList();
 
   Future<BlogModel> uploadBlog(BlogModel blog);
 
@@ -21,11 +21,12 @@ class BlogRemoteSourceImpl implements BlogRemoteSource {
   const BlogRemoteSourceImpl(this.supabaseClient);
 
   @override
-  Future<List<BlogModel>> fetchAllBlogs() async {
+  Future<List<BlogModel>> fetchBlogList() async {
     try {
       final blogsData = await supabaseClient
           .from('blogs')
-          .select('*, users (name)');
+          .select('*, users (name)')
+          .order('updated_at', ascending: false);
 
       return blogsData
           .map(
