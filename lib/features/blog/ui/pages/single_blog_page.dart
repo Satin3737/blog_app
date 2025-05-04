@@ -21,6 +21,8 @@ class SingleBlogPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(),
       body: Scrollbar(
+        interactive: true,
+        thickness: 2,
         child: SingleChildScrollView(
           padding: EdgeInsets.all(16).copyWith(bottom: 32),
           child: Column(
