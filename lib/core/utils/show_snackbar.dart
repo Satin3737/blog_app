@@ -15,8 +15,8 @@ void showSnackBar(
         content: Text(message, style: const TextStyle(color: AppPallet.white)),
         behavior: SnackBarBehavior.floating,
         backgroundColor: switch (type) {
-          SnackBarType.success => AppPallet.gradient1,
-          SnackBarType.info => AppPallet.gradient2,
+          SnackBarType.success => AppPallet.success,
+          SnackBarType.info => AppPallet.info,
           SnackBarType.error => AppPallet.error,
         },
         margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),

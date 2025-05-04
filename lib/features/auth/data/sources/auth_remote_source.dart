@@ -1,3 +1,5 @@
+import 'package:blog_app/core/constants/messages.dart';
+import 'package:blog_app/core/constants/tables.dart';
 import 'package:blog_app/core/error/exceptions.dart';
 import 'package:blog_app/features/auth/data/models/user_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -62,12 +64,14 @@ class AuthRemoteSourceImpl implements AuthRemoteSource {
 
       final userData =
           await supabaseClient
-              .from('users')
+              .from(Tables.users)
               .select()
               .eq('id', currentSession!.user.id)
               .single();
 
       return UserModel.fromJson(userData);
+    } on PostgrestException catch (e) {
+      throw ServerException(e.message);
     } catch (e) {
       throw ServerException(e.toString());
     }
@@ -79,7 +83,7 @@ class AuthRemoteSourceImpl implements AuthRemoteSource {
     try {
       final response = await userRequest();
 
-      if (response.user == null) throw ServerException('User not found');
+      if (response.user == null) throw ServerException(Messages.noUserError);
 
       return UserModel.fromJson(response.user!.toJson());
     } on AuthException catch (e) {

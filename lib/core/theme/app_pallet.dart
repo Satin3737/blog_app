@@ -6,8 +6,10 @@ class AppPallet {
   static const Color gradient2 = Color.fromRGBO(251, 109, 169, 1);
   static const Color gradient3 = Color.fromRGBO(255, 159, 124, 1);
   static const Color border = Color.fromRGBO(52, 51, 67, 1);
+  static const Color transparent = Colors.transparent;
   static const Color white = Colors.white;
   static const Color grey = Colors.grey;
-  static const Color error = Colors.redAccent;
-  static const Color transparent = Colors.transparent;
+  static Color success = Colors.green.shade700;
+  static Color info = Colors.blue.shade700;
+  static Color error = Colors.red.shade700;
 }

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:blog_app/core/constants/tables.dart';
 import 'package:blog_app/core/error/exceptions.dart';
 import 'package:blog_app/features/blog/data/models/blog_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -24,15 +25,15 @@ class BlogRemoteSourceImpl implements BlogRemoteSource {
   Future<List<BlogModel>> fetchBlogList() async {
     try {
       final blogsData = await supabaseClient
-          .from('blogs')
-          .select('*, users (name)')
+          .from(Tables.blogs)
+          .select('*, ${Tables.users} (name)')
           .order('updated_at', ascending: false);
 
       return blogsData
           .map(
             (blog) => BlogModel.fromJson(
               blog,
-            ).copyWith(authorName: blog['users']['name']),
+            ).copyWith(authorName: blog[Tables.users]['name']),
           )
           .toList();
     } on PostgrestException catch (e) {
@@ -47,7 +48,7 @@ class BlogRemoteSourceImpl implements BlogRemoteSource {
     try {
       final blogData =
           await supabaseClient
-              .from('blogs')
+              .from(Tables.blogs)
               .insert(blog.toJson())
               .select()
               .single();
@@ -67,8 +68,8 @@ class BlogRemoteSourceImpl implements BlogRemoteSource {
   }) async {
     try {
       final storage = supabaseClient.storage;
-      await storage.from('blog_images').upload(blog.id, image);
-      return storage.from('blog_images').getPublicUrl(blog.id);
+      await storage.from(Tables.blogImages).upload(blog.id, image);
+      return storage.from(Tables.blogImages).getPublicUrl(blog.id);
     } on PostgrestException catch (e) {
       throw ServerException(e.message);
     } catch (e) {

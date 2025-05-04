@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:blog_app/core/common/cubits/user/app_user_cubit.dart';
 import 'package:blog_app/core/common/widgets/loader.dart';
-import 'package:blog_app/core/constants/topics.dart';
+import 'package:blog_app/core/constants/lists.dart';
 import 'package:blog_app/core/theme/app_pallet.dart';
 import 'package:blog_app/core/utils/pick_image.dart';
 import 'package:blog_app/core/utils/show_snackbar.dart';
@@ -148,11 +148,11 @@ class _AddNewBlogPageState extends State<AddNewBlogPage> {
                   SizedBox(
                     height: 36,
                     child: ListView.separated(
-                      itemCount: topics.length,
+                      itemCount: Lists.topics.length,
                       scrollDirection: Axis.horizontal,
                       separatorBuilder: (context, index) => SizedBox(width: 8),
                       itemBuilder: (context, index) {
-                        final topic = topics[index];
+                        final topic = Lists.topics[index];
                         final isSelected = _selectedTopics.contains(topic);
 
                         return GestureDetector(
