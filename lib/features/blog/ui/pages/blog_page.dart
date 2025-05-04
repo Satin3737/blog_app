@@ -1,3 +1,4 @@
+import 'package:blog_app/core/common/widgets/linear_loader.dart';
 import 'package:blog_app/core/router/routes.dart';
 import 'package:blog_app/core/theme/app_pallet.dart';
 import 'package:blog_app/core/utils/show_snackbar.dart';
@@ -39,10 +40,8 @@ class _BlogPageState extends State<BlogPage> {
           preferredSize: const Size.fromHeight(4),
           child: BlocBuilder<BlogListBloc, BlogListState>(
             builder: (context, state) {
-              return AnimatedOpacity(
-                opacity: state.status == BlogListStatus.initial ? 1 : 0,
-                duration: const Duration(milliseconds: 300),
-                child: const LinearProgressIndicator(),
+              return LinearLoader(
+                loading: state.status == BlogListStatus.initial,
               );
             },
           ),
