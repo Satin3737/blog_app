@@ -20,6 +20,8 @@ class BlogListBloc extends Bloc<BlogListEvent, BlogListState> {
     BlogListFetched event,
     Emitter<BlogListState> emit,
   ) async {
+    emit(state.copyWith(status: BlogListStatus.loading));
+
     try {
       final response = await _fetchBlogList(NoParams());
 

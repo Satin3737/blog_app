@@ -1,11 +1,11 @@
 part of 'blog_list_bloc.dart';
 
-enum BlogListStatus { initial, success, failure }
+enum BlogListStatus { loading, success, failure }
 
 @immutable
 final class BlogListState {
   const BlogListState({
-    this.status = BlogListStatus.initial,
+    this.status = BlogListStatus.loading,
     this.blogs = const <Blog>[],
     this.error = '',
   });

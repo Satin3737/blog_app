@@ -41,48 +41,51 @@ class _BlogPageState extends State<BlogPage> {
           child: BlocBuilder<BlogListBloc, BlogListState>(
             builder: (context, state) {
               return LinearLoader(
-                loading: state.status == BlogListStatus.initial,
+                loading: state.status == BlogListStatus.loading,
               );
             },
           ),
         ),
       ),
-      body: BlocConsumer<BlogListBloc, BlogListState>(
-        listener: (context, state) {
-          if (state.status == BlogListStatus.failure) {
-            showSnackBar(context, state.error);
-          }
-        },
-        builder: (context, state) {
-          if (state.status == BlogListStatus.failure) {
-            return Center(
-              child: TextButton(
-                onPressed: _fetchBlogList,
-                child: Text('Try again!'),
-              ),
-            );
-          }
-
-          if (state.blogs.isEmpty) {
-            return const Center(child: Text('No blogs'));
-          }
-
-          return ListView.separated(
-            padding: EdgeInsets.all(16).copyWith(bottom: 32),
-            itemBuilder: (context, index) {
-              return BlogCard(
-                blog: state.blogs[index],
-                color: switch (index % 3) {
-                  0 => AppPallet.gradient1,
-                  1 => AppPallet.gradient2,
-                  _ => AppPallet.gradient3,
-                },
+      body: RefreshIndicator(
+        onRefresh: () async => _fetchBlogList(),
+        child: BlocConsumer<BlogListBloc, BlogListState>(
+          listener: (context, state) {
+            if (state.status == BlogListStatus.failure) {
+              showSnackBar(context, state.error);
+            }
+          },
+          builder: (context, state) {
+            if (state.status == BlogListStatus.failure) {
+              return Center(
+                child: TextButton(
+                  onPressed: _fetchBlogList,
+                  child: Text('Try again!'),
+                ),
               );
-            },
-            separatorBuilder: (context, index) => const SizedBox(height: 16),
-            itemCount: state.blogs.length,
-          );
-        },
+            }
+
+            if (state.blogs.isEmpty) {
+              return const Center(child: Text('No blogs'));
+            }
+
+            return ListView.separated(
+              padding: EdgeInsets.all(16).copyWith(bottom: 32),
+              itemBuilder: (context, index) {
+                return BlogCard(
+                  blog: state.blogs[index],
+                  color: switch (index % 3) {
+                    0 => AppPallet.gradient1,
+                    1 => AppPallet.gradient2,
+                    _ => AppPallet.gradient3,
+                  },
+                );
+              },
+              separatorBuilder: (context, index) => const SizedBox(height: 16),
+              itemCount: state.blogs.length,
+            );
+          },
+        ),
       ),
     );
   }
