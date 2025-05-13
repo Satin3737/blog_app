@@ -3,8 +3,7 @@ import 'package:blog_app/core/router/app_router.dart';
 import 'package:blog_app/core/theme/theme.dart';
 import 'package:blog_app/dependencies/dependencies.dart';
 import 'package:blog_app/features/auth/ui/bloc/auth_bloc.dart';
-import 'package:blog_app/features/blog/ui/bloc/blog_list/blog_list_bloc.dart';
-import 'package:blog_app/features/blog/ui/bloc/blog_upload/blog_upload_bloc.dart';
+import 'package:blog_app/features/blog/ui/bloc/blog_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,8 +16,7 @@ Future<void> main() async {
       providers: [
         BlocProvider(create: (_) => sl<AppUserCubit>()),
         BlocProvider(create: (_) => sl<AuthBloc>()),
-        BlocProvider(create: (_) => sl<BlogListBloc>()),
-        BlocProvider(create: (_) => sl<BlogUploadBloc>()),
+        BlocProvider(create: (_) => sl<BlogBloc>()),
       ],
       child: const MyApp(),
     ),

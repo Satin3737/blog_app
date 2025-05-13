@@ -6,9 +6,9 @@ import 'package:blog_app/features/blog/data/models/blog_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 abstract interface class BlogRemoteSource {
-  Future<List<BlogModel>> fetchBlogList();
+  Future<List<BlogModel>> fetchBlogs();
 
-  Future<BlogModel> uploadBlog(BlogModel blog);
+  Future<BlogModel> createBlog(BlogModel blog);
 
   Future<String> uploadBlogImage({
     required File image,
@@ -24,7 +24,7 @@ class BlogRemoteSourceImpl implements BlogRemoteSource {
   const BlogRemoteSourceImpl(this.supabaseClient);
 
   @override
-  Future<List<BlogModel>> fetchBlogList() async {
+  Future<List<BlogModel>> fetchBlogs() async {
     try {
       final blogsData = await supabaseClient
           .from(Tables.blogs)
@@ -46,7 +46,7 @@ class BlogRemoteSourceImpl implements BlogRemoteSource {
   }
 
   @override
-  Future<BlogModel> uploadBlog(BlogModel blog) async {
+  Future<BlogModel> createBlog(BlogModel blog) async {
     try {
       final blogData =
           await supabaseClient
@@ -72,7 +72,7 @@ class BlogRemoteSourceImpl implements BlogRemoteSource {
       final storage = supabaseClient.storage;
       await storage.from(Tables.blogImages).upload(blog.id, image);
       return storage.from(Tables.blogImages).getPublicUrl(blog.id);
-    } on PostgrestException catch (e) {
+    } on StorageException catch (e) {
       throw ServerException(e.message);
     } catch (e) {
       throw ServerException(e.toString());

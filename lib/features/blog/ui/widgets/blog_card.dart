@@ -2,7 +2,7 @@ import 'package:blog_app/core/common/cubits/user/app_user_cubit.dart';
 import 'package:blog_app/core/router/routes.dart';
 import 'package:blog_app/core/utils/calc_reading_time.dart';
 import 'package:blog_app/features/blog/domain/entities/blog.dart';
-import 'package:blog_app/features/blog/ui/bloc/blog_list/blog_list_bloc.dart';
+import 'package:blog_app/features/blog/ui/bloc/blog_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -24,7 +24,7 @@ class BlogCard extends StatelessWidget {
     }
 
     void onBlogDelete() {
-      context.read<BlogListBloc>().add(BlogListDeleteBlog(blog));
+      context.read<BlogBloc>().add(BlogDeleted(blog));
     }
 
     return GestureDetector(
@@ -84,10 +84,10 @@ class BlogCard extends StatelessWidget {
                   child: PopupMenuButton(
                     itemBuilder:
                         (context) => [
-                          PopupMenuItem(child: Text('Edit'), onTap: onBlogEdit),
+                          PopupMenuItem(onTap: onBlogEdit, child: Text('Edit')),
                           PopupMenuItem(
-                            child: Text('Delete'),
                             onTap: onBlogDelete,
+                            child: Text('Delete'),
                           ),
                         ],
                   ),

@@ -24,13 +24,13 @@ class BlogRepositoryImpl implements BlogRepository {
   });
 
   @override
-  Future<Either<Failure, List<Blog>>> fetchBlogList() async {
+  Future<Either<Failure, List<Blog>>> fetchBlogs() async {
     try {
       if (!await connectionChecker.isConnected) {
         return Right(blogLocalSource.loadLocalBlogs());
       }
 
-      final blogs = await blogRemoteSource.fetchBlogList();
+      final blogs = await blogRemoteSource.fetchBlogs();
       blogLocalSource.saveLocalBlogs(blogs);
 
       return Right(blogs);
@@ -40,7 +40,7 @@ class BlogRepositoryImpl implements BlogRepository {
   }
 
   @override
-  Future<Either<Failure, Blog>> uploadBlog({
+  Future<Either<Failure, Blog>> createBlog({
     required File image,
     required String title,
     required String content,
@@ -69,7 +69,7 @@ class BlogRepositoryImpl implements BlogRepository {
 
       blogModel = blogModel.copyWith(imageUrl: imageUrl);
 
-      final blog = await blogRemoteSource.uploadBlog(blogModel);
+      final blog = await blogRemoteSource.createBlog(blogModel);
 
       return Right(blog);
     } on ServerException catch (e) {

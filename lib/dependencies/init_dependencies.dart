@@ -62,14 +62,11 @@ void _initBlog() {
       ),
     )
     // usecases
-    ..registerFactory<BlogUpload>(() => BlogUpload(sl()))
-    ..registerFactory<FetchBlogList>(() => FetchBlogList(sl()))
+    ..registerFactory<BlogCreate>(() => BlogCreate(sl()))
+    ..registerFactory<BlogsFetch>(() => BlogsFetch(sl()))
     ..registerFactory<BlogDelete>(() => BlogDelete(sl()))
     // bloc
-    ..registerLazySingleton<BlogListBloc>(
-      () => BlogListBloc(fetchBlogList: sl(), blogDelete: sl()),
-    )
-    ..registerLazySingleton<BlogUploadBloc>(
-      () => BlogUploadBloc(blogUpload: sl(), blogListBloc: sl()),
+    ..registerLazySingleton<BlogBloc>(
+      () => BlogBloc(blogsFetch: sl(), blogCreate: sl(), blogDelete: sl()),
     );
 }
