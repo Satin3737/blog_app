@@ -12,6 +12,19 @@ class BlogModel extends Blog {
     super.authorName,
   });
 
+  factory BlogModel.fromEntity(Blog blog) {
+    return BlogModel(
+      id: blog.id,
+      authorId: blog.authorId,
+      title: blog.title,
+      content: blog.content,
+      imageUrl: blog.imageUrl,
+      topics: blog.topics,
+      updatedAt: blog.updatedAt,
+      authorName: blog.authorName,
+    );
+  }
+
   factory BlogModel.fromJson(Map<String, dynamic> json) {
     return BlogModel(
       id: json['id'] ?? '',
