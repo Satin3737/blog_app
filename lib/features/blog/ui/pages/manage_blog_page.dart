@@ -13,14 +13,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-class AddNewBlogPage extends StatefulWidget {
-  const AddNewBlogPage({super.key});
+class ManageBlogPage extends StatefulWidget {
+  const ManageBlogPage({super.key});
 
   @override
-  State<AddNewBlogPage> createState() => _AddNewBlogPageState();
+  State<ManageBlogPage> createState() => _ManageBlogPageState();
 }
 
-class _AddNewBlogPageState extends State<AddNewBlogPage> {
+class _ManageBlogPageState extends State<ManageBlogPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _contentController = TextEditingController();

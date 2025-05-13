@@ -2,8 +2,8 @@ import 'package:blog_app/core/router/routes.dart';
 import 'package:blog_app/features/auth/ui/pages/signin_page.dart';
 import 'package:blog_app/features/auth/ui/pages/signup_page.dart';
 import 'package:blog_app/features/blog/domain/entities/blog.dart';
-import 'package:blog_app/features/blog/ui/pages/add_new_blog_page.dart';
 import 'package:blog_app/features/blog/ui/pages/blog_page.dart';
+import 'package:blog_app/features/blog/ui/pages/manage_blog_page.dart';
 import 'package:blog_app/features/blog/ui/pages/single_blog_page.dart';
 import 'package:go_router/go_router.dart';
 
@@ -24,8 +24,8 @@ class AppRouter {
         builder: (context, state) => const BlogPage(),
         routes: [
           GoRoute(
-            path: Routes.blogNew,
-            builder: (context, state) => const AddNewBlogPage(),
+            path: Routes.blogManage,
+            builder: (context, state) => const ManageBlogPage(),
           ),
           GoRoute(
             path: Routes.blogSingle,

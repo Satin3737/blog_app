@@ -17,7 +17,7 @@ class BlogPage extends StatefulWidget {
 
 class _BlogPageState extends State<BlogPage> {
   void _fetchBlogList() => context.read<BlogListBloc>().add(BlogListFetched());
-  void _onAddNewBlog() => context.go('${Routes.blog}/${Routes.blogNew}');
+  void _onAddNewBlog() => context.go('${Routes.blog}/${Routes.blogManage}');
 
   @override
   void initState() {
