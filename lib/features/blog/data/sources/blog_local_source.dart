@@ -3,7 +3,10 @@ import 'package:hive/hive.dart';
 
 abstract interface class BlogLocalSource {
   void saveLocalBlogs(List<BlogModel> blogs);
+
   List<BlogModel> loadLocalBlogs();
+
+  void deleteLocalBlog(BlogModel blog);
 }
 
 class BlogLocalSourceImpl implements BlogLocalSource {
@@ -34,5 +37,19 @@ class BlogLocalSourceImpl implements BlogLocalSource {
     });
 
     return blogs;
+  }
+
+  @override
+  void deleteLocalBlog(BlogModel blog) {
+    if (box.isEmpty) return;
+
+    box.read(() {
+      for (int i = 0; i < box.length; i++) {
+        if (box.get(i.toString())['id'] == blog.id) {
+          box.delete(i.toString());
+          break;
+        }
+      }
+    });
   }
 }

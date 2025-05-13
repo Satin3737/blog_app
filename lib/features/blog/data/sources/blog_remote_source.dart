@@ -14,6 +14,8 @@ abstract interface class BlogRemoteSource {
     required File image,
     required BlogModel blog,
   });
+
+  Future<void> deleteBlog(BlogModel blog);
 }
 
 class BlogRemoteSourceImpl implements BlogRemoteSource {
@@ -70,6 +72,17 @@ class BlogRemoteSourceImpl implements BlogRemoteSource {
       final storage = supabaseClient.storage;
       await storage.from(Tables.blogImages).upload(blog.id, image);
       return storage.from(Tables.blogImages).getPublicUrl(blog.id);
+    } on PostgrestException catch (e) {
+      throw ServerException(e.message);
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<void> deleteBlog(BlogModel blog) async {
+    try {
+      await supabaseClient.from(Tables.blogs).delete().eq('id', blog.id);
     } on PostgrestException catch (e) {
       throw ServerException(e.message);
     } catch (e) {

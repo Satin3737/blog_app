@@ -13,6 +13,7 @@ import 'package:blog_app/features/blog/data/repository/blog_repository_impl.dart
 import 'package:blog_app/features/blog/data/sources/blog_local_source.dart';
 import 'package:blog_app/features/blog/data/sources/blog_remote_source.dart';
 import 'package:blog_app/features/blog/domain/repository/blog_repository.dart';
+import 'package:blog_app/features/blog/domain/usecases/blog_delete.dart';
 import 'package:blog_app/features/blog/domain/usecases/blog_upload.dart';
 import 'package:blog_app/features/blog/domain/usecases/fetch_blog_list.dart';
 import 'package:blog_app/features/blog/ui/bloc/blog_list/blog_list_bloc.dart';

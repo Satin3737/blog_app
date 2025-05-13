@@ -64,8 +64,11 @@ void _initBlog() {
     // usecases
     ..registerFactory<BlogUpload>(() => BlogUpload(sl()))
     ..registerFactory<FetchBlogList>(() => FetchBlogList(sl()))
+    ..registerFactory<BlogDelete>(() => BlogDelete(sl()))
     // bloc
-    ..registerLazySingleton<BlogListBloc>(() => BlogListBloc(sl()))
+    ..registerLazySingleton<BlogListBloc>(
+      () => BlogListBloc(fetchBlogList: sl(), blogDelete: sl()),
+    )
     ..registerLazySingleton<BlogUploadBloc>(
       () => BlogUploadBloc(blogUpload: sl(), blogListBloc: sl()),
     );

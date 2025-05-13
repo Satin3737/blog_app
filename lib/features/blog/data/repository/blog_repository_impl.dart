@@ -76,4 +76,19 @@ class BlogRepositoryImpl implements BlogRepository {
       return Left(Failure(e.message));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> deleteBlog(Blog blog) async {
+    try {
+      if (!await connectionChecker.isConnected) {
+        return Left(Failure(Messages.noConnectionError));
+      }
+
+      blogRemoteSource.deleteBlog(BlogModel.fromEntity(blog));
+
+      return const Right(null);
+    } on ServerException catch (e) {
+      return Left(Failure(e.message));
+    }
+  }
 }
