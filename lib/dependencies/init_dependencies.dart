@@ -31,14 +31,14 @@ void _initCore() {
 void _initAuth() {
   sl
     // repository
-    ..registerFactory<AuthRemoteSource>(() => AuthRemoteSourceImpl(sl()))
-    ..registerFactory<AuthRepository>(
+    ..registerLazySingleton<AuthRemoteSource>(() => AuthRemoteSourceImpl(sl()))
+    ..registerLazySingleton<AuthRepository>(
       () => AuthRepositoryImpl(authRemoteSource: sl(), connectionChecker: sl()),
     )
     // usecases
-    ..registerFactory<UserSignUp>(() => UserSignUp(sl()))
-    ..registerFactory<UserSignIn>(() => UserSignIn(sl()))
-    ..registerFactory<CurrentUser>(() => CurrentUser(sl()))
+    ..registerLazySingleton<UserSignUp>(() => UserSignUp(sl()))
+    ..registerLazySingleton<UserSignIn>(() => UserSignIn(sl()))
+    ..registerLazySingleton<CurrentUser>(() => CurrentUser(sl()))
     // bloc
     ..registerLazySingleton<AuthBloc>(
       () => AuthBloc(
@@ -53,9 +53,9 @@ void _initAuth() {
 void _initBlog() {
   sl
     // repository
-    ..registerFactory<BlogRemoteSource>(() => BlogRemoteSourceImpl(sl()))
-    ..registerFactory<BlogLocalSource>(() => BlogLocalSourceImpl(sl()))
-    ..registerFactory<BlogRepository>(
+    ..registerLazySingleton<BlogRemoteSource>(() => BlogRemoteSourceImpl(sl()))
+    ..registerLazySingleton<BlogLocalSource>(() => BlogLocalSourceImpl(sl()))
+    ..registerLazySingleton<BlogRepository>(
       () => BlogRepositoryImpl(
         blogRemoteSource: sl(),
         blogLocalSource: sl(),
@@ -63,10 +63,10 @@ void _initBlog() {
       ),
     )
     // usecases
-    ..registerFactory<BlogsFetch>(() => BlogsFetch(sl()))
-    ..registerFactory<BlogCreate>(() => BlogCreate(sl()))
-    ..registerFactory<BlogEdit>(() => BlogEdit(sl()))
-    ..registerFactory<BlogDelete>(() => BlogDelete(sl()))
+    ..registerLazySingleton<BlogsFetch>(() => BlogsFetch(sl()))
+    ..registerLazySingleton<BlogCreate>(() => BlogCreate(sl()))
+    ..registerLazySingleton<BlogEdit>(() => BlogEdit(sl()))
+    ..registerLazySingleton<BlogDelete>(() => BlogDelete(sl()))
     // bloc
     ..registerLazySingleton<BlogBloc>(
       () => BlogBloc(
