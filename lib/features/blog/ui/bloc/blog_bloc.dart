@@ -4,6 +4,7 @@ import 'package:blog_app/core/usecase/usecase.dart';
 import 'package:blog_app/features/blog/domain/entities/blog.dart';
 import 'package:blog_app/features/blog/domain/usecases/blog_create.dart';
 import 'package:blog_app/features/blog/domain/usecases/blog_delete.dart';
+import 'package:blog_app/features/blog/domain/usecases/blog_edit.dart';
 import 'package:blog_app/features/blog/domain/usecases/fetch_blogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,18 +15,22 @@ part 'blog_state.dart';
 class BlogBloc extends Bloc<BlogEvent, BlogState> {
   final BlogsFetch _blogsFetch;
   final BlogCreate _blogCreate;
+  final BlogEdit _blogEdit;
   final BlogDelete _blogDelete;
 
   BlogBloc({
     required BlogsFetch blogsFetch,
     required BlogCreate blogCreate,
+    required BlogEdit blogEdit,
     required BlogDelete blogDelete,
   }) : _blogsFetch = blogsFetch,
        _blogCreate = blogCreate,
+       _blogEdit = blogEdit,
        _blogDelete = blogDelete,
        super(const BlogState()) {
     on<BlogsFetched>(_onBlogsFetched);
     on<BlogCreated>(_onBlogCreated);
+    on<BlogEdited>(_onBlogEdited);
     on<BlogDeleted>(_onBlogDeleted);
   }
 
@@ -79,6 +84,41 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
     }
   }
 
+  void _onBlogEdited(BlogEdited event, Emitter<BlogState> emit) async {
+    emit(state.copyWith(status: BlogStatus.loading));
+
+    try {
+      final response = await _blogEdit(
+        BlogEditParams(
+          id: event.id,
+          image: event.image,
+          title: event.title,
+          content: event.content,
+          topics: event.topics,
+          authorId: event.authorId,
+        ),
+      );
+
+      response.fold(
+        (failure) => emit(
+          state.copyWith(status: BlogStatus.failure, error: failure.message),
+        ),
+        (blog) {
+          emit(
+            state.copyWith(
+              status: BlogStatus.success,
+              blogs:
+                  state.blogs.map((b) => b.id == blog.id ? blog : b).toList()
+                    ..sort((a, b) => b.updatedAt.compareTo(a.updatedAt)),
+            ),
+          );
+        },
+      );
+    } catch (e) {
+      emit(state.copyWith(status: BlogStatus.failure, error: e.toString()));
+    }
+  }
+
   void _onBlogDeleted(BlogDeleted event, Emitter<BlogState> emit) async {
     emit(state.copyWith(status: BlogStatus.loading));
 
@@ -89,11 +129,10 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
         (failure) => emit(
           state.copyWith(status: BlogStatus.failure, error: failure.message),
         ),
-        (_) => emit(
+        (blog) => emit(
           state.copyWith(
             status: BlogStatus.success,
-            blogs:
-                state.blogs.where((blog) => blog.id != event.blog.id).toList(),
+            blogs: state.blogs.where((b) => b.id != blog.id).toList(),
           ),
         ),
       );

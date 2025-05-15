@@ -10,12 +10,19 @@ abstract interface class BlogRemoteSource {
 
   Future<BlogModel> createBlog(BlogModel blog);
 
+  Future<BlogModel> editBlog(BlogModel blog);
+
+  Future<BlogModel> deleteBlog(BlogModel blog);
+
   Future<String> uploadBlogImage({
     required File image,
     required BlogModel blog,
   });
 
-  Future<void> deleteBlog(BlogModel blog);
+  Future<String> updateBlogImage({
+    required File image,
+    required BlogModel blog,
+  });
 }
 
 class BlogRemoteSourceImpl implements BlogRemoteSource {
@@ -64,6 +71,37 @@ class BlogRemoteSourceImpl implements BlogRemoteSource {
   }
 
   @override
+  Future<BlogModel> editBlog(BlogModel blog) async {
+    try {
+      final blogData =
+          await supabaseClient
+              .from(Tables.blogs)
+              .update(blog.toJson())
+              .eq('id', blog.id)
+              .select()
+              .single();
+
+      return BlogModel.fromJson(blogData);
+    } on PostgrestException catch (e) {
+      throw ServerException(e.message);
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<BlogModel> deleteBlog(BlogModel blog) async {
+    try {
+      await supabaseClient.from(Tables.blogs).delete().eq('id', blog.id);
+      return blog;
+    } on PostgrestException catch (e) {
+      throw ServerException(e.message);
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
   Future<String> uploadBlogImage({
     required File image,
     required BlogModel blog,
@@ -80,10 +118,15 @@ class BlogRemoteSourceImpl implements BlogRemoteSource {
   }
 
   @override
-  Future<void> deleteBlog(BlogModel blog) async {
+  Future<String> updateBlogImage({
+    required File image,
+    required BlogModel blog,
+  }) async {
     try {
-      await supabaseClient.from(Tables.blogs).delete().eq('id', blog.id);
-    } on PostgrestException catch (e) {
+      final storage = supabaseClient.storage;
+      await storage.from(Tables.blogImages).update(blog.id, image);
+      return storage.from(Tables.blogImages).getPublicUrl(blog.id);
+    } on StorageException catch (e) {
       throw ServerException(e.message);
     } catch (e) {
       throw ServerException(e.toString());

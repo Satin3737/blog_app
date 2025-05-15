@@ -1,4 +1,4 @@
-import 'package:blog_app/core/common/widgets/loader.dart';
+import 'package:blog_app/core/common/widgets/image_loader.dart';
 import 'package:blog_app/core/theme/app_pallet.dart';
 import 'package:blog_app/core/utils/calc_reading_time.dart';
 import 'package:blog_app/core/utils/format_date.dart';
@@ -64,18 +64,9 @@ class SingleBlogPage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
                 child: AspectRatio(
                   aspectRatio: 16 / 9,
-                  child: FadeInImage.assetNetwork(
-                    placeholder: '',
+                  child: ImageLoader(
                     image: blog.imageUrl,
-                    fit: BoxFit.cover,
-                    placeholderErrorBuilder: (_, __, ___) => const Loader(),
-                    imageErrorBuilder: (_, __, ___) {
-                      return Icon(
-                        Icons.broken_image,
-                        color: AppPallet.grey,
-                        size: 64,
-                      );
-                    },
+                    updatedAt: blog.updatedAt,
                   ),
                 ),
               ),

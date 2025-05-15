@@ -17,14 +17,15 @@ Future<void> _initBase() async {
 
   Hive.defaultDirectory = (await getApplicationDocumentsDirectory()).path;
 
-  sl.registerLazySingleton(() => supabase.client);
-  sl.registerLazySingleton(() => Hive.box(name: Tables.blogs));
+  sl
+    ..registerLazySingleton<SupabaseClient>(() => supabase.client)
+    ..registerLazySingleton<Box>(() => Hive.box(name: Tables.blogs));
 }
 
 void _initCore() {
-  sl.registerFactory(() => InternetConnection());
-  sl.registerFactory<ConnectionChecker>(() => ConnectionCheckerImpl(sl()));
-  sl.registerLazySingleton<AppUserCubit>(() => AppUserCubit());
+  sl
+    ..registerLazySingleton<ConnectionChecker>(() => ConnectionChecker())
+    ..registerLazySingleton<AppUserCubit>(() => AppUserCubit());
 }
 
 void _initAuth() {
@@ -62,11 +63,17 @@ void _initBlog() {
       ),
     )
     // usecases
-    ..registerFactory<BlogCreate>(() => BlogCreate(sl()))
     ..registerFactory<BlogsFetch>(() => BlogsFetch(sl()))
+    ..registerFactory<BlogCreate>(() => BlogCreate(sl()))
+    ..registerFactory<BlogEdit>(() => BlogEdit(sl()))
     ..registerFactory<BlogDelete>(() => BlogDelete(sl()))
     // bloc
     ..registerLazySingleton<BlogBloc>(
-      () => BlogBloc(blogsFetch: sl(), blogCreate: sl(), blogDelete: sl()),
+      () => BlogBloc(
+        blogsFetch: sl(),
+        blogCreate: sl(),
+        blogEdit: sl(),
+        blogDelete: sl(),
+      ),
     );
 }

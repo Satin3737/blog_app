@@ -78,15 +78,56 @@ class BlogRepositoryImpl implements BlogRepository {
   }
 
   @override
-  Future<Either<Failure, void>> deleteBlog(Blog blog) async {
+  Future<Either<Failure, Blog>> editBlog({
+    required String id,
+    required File image,
+    required String title,
+    required String content,
+    required List<String> topics,
+    required String authorId,
+  }) async {
     try {
       if (!await connectionChecker.isConnected) {
         return Left(Failure(Messages.noConnectionError));
       }
 
-      blogRemoteSource.deleteBlog(BlogModel.fromEntity(blog));
+      BlogModel blogModel = BlogModel(
+        id: id,
+        authorId: authorId,
+        title: title,
+        content: content,
+        imageUrl: '',
+        topics: topics,
+        updatedAt: DateTime.now(),
+      );
 
-      return const Right(null);
+      final imageUrl = await blogRemoteSource.updateBlogImage(
+        image: image,
+        blog: blogModel,
+      );
+
+      blogModel = blogModel.copyWith(imageUrl: imageUrl);
+      final updatedBlog = await blogRemoteSource.editBlog(blogModel);
+      blogLocalSource.editLocalBlog(updatedBlog);
+
+      return Right(updatedBlog);
+    } on ServerException catch (e) {
+      return Left(Failure(e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Blog>> deleteBlog(Blog blog) async {
+    try {
+      if (!await connectionChecker.isConnected) {
+        return Left(Failure(Messages.noConnectionError));
+      }
+
+      final blogModel = BlogModel.fromEntity(blog);
+      blogRemoteSource.deleteBlog(blogModel);
+      blogLocalSource.deleteLocalBlog(blogModel);
+
+      return Right(blog);
     } on ServerException catch (e) {
       return Left(Failure(e.message));
     }

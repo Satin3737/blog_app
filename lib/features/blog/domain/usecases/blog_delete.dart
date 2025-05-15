@@ -10,7 +10,7 @@ class BlogDelete implements UseCase<void, BlogDeleteParams> {
   const BlogDelete(this.blogRepository);
 
   @override
-  Future<Either<Failure, void>> call(BlogDeleteParams params) async {
+  Future<Either<Failure, Blog>> call(BlogDeleteParams params) async {
     return await blogRepository.deleteBlog(params.blog);
   }
 }

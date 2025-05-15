@@ -1,10 +1,8 @@
-import 'package:blog_app/core/common/cubits/user/app_user_cubit.dart';
 import 'package:blog_app/core/router/routes.dart';
 import 'package:blog_app/core/utils/calc_reading_time.dart';
 import 'package:blog_app/features/blog/domain/entities/blog.dart';
-import 'package:blog_app/features/blog/ui/bloc/blog_bloc.dart';
+import 'package:blog_app/features/blog/ui/widgets/blog_options_menu.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class BlogCard extends StatelessWidget {
@@ -17,14 +15,6 @@ class BlogCard extends StatelessWidget {
   Widget build(BuildContext context) {
     void onCardTap() {
       context.go('${Routes.blog}/${Routes.blogSingle}', extra: blog);
-    }
-
-    void onBlogEdit() {
-      print('edit');
-    }
-
-    void onBlogDelete() {
-      context.read<BlogBloc>().add(BlogDeleted(blog));
     }
 
     return GestureDetector(
@@ -64,7 +54,7 @@ class BlogCard extends StatelessWidget {
                       blog.title,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.w700,
                       ),
@@ -75,27 +65,7 @@ class BlogCard extends StatelessWidget {
               ],
             ),
           ),
-          BlocBuilder<AppUserCubit, AppUserState>(
-            builder: (context, state) {
-              if ((state as AppUserLoggedIn).user.id == blog.authorId) {
-                return Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: PopupMenuButton(
-                    itemBuilder:
-                        (context) => [
-                          PopupMenuItem(onTap: onBlogEdit, child: Text('Edit')),
-                          PopupMenuItem(
-                            onTap: onBlogDelete,
-                            child: Text('Delete'),
-                          ),
-                        ],
-                  ),
-                );
-              }
-              return SizedBox();
-            },
-          ),
+          BlogOptionsMenu(blog: blog),
         ],
       ),
     );

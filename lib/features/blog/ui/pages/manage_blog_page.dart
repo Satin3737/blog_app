@@ -2,30 +2,45 @@ import 'dart:io';
 
 import 'package:blog_app/core/common/cubits/user/app_user_cubit.dart';
 import 'package:blog_app/core/common/widgets/linear_loader.dart';
-import 'package:blog_app/core/constants/lists.dart';
-import 'package:blog_app/core/theme/app_pallet.dart';
 import 'package:blog_app/core/utils/pick_image.dart';
 import 'package:blog_app/core/utils/show_snackbar.dart';
+import 'package:blog_app/features/blog/domain/entities/blog.dart';
 import 'package:blog_app/features/blog/ui/bloc/blog_bloc.dart';
 import 'package:blog_app/features/blog/ui/widgets/blog_field.dart';
-import 'package:dotted_border/dotted_border.dart';
+import 'package:blog_app/features/blog/ui/widgets/blog_image_picker.dart';
+import 'package:blog_app/features/blog/ui/widgets/blog_topic_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class ManageBlogPage extends StatefulWidget {
-  const ManageBlogPage({super.key});
+  final Blog? blog;
+
+  const ManageBlogPage(this.blog, {super.key});
 
   @override
   State<ManageBlogPage> createState() => _ManageBlogPageState();
 }
 
 class _ManageBlogPageState extends State<ManageBlogPage> {
+  late final bool isEdit;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _contentController = TextEditingController();
   final List<String> _selectedTopics = [];
   File? _selectedImage;
+
+  @override
+  void initState() {
+    super.initState();
+    isEdit = widget.blog is Blog && widget.blog != null;
+
+    if (isEdit) {
+      _titleController.text = widget.blog!.title;
+      _contentController.text = widget.blog!.content;
+      _selectedTopics.addAll(widget.blog!.topics);
+    }
+  }
 
   void _onImageSelect() async {
     final image = await pickImageFromGallery();
@@ -58,15 +73,28 @@ class _ManageBlogPageState extends State<ManageBlogPage> {
     final authorId =
         (context.read<AppUserCubit>().state as AppUserLoggedIn).user.id;
 
-    context.read<BlogBloc>().add(
-      BlogCreated(
-        image: _selectedImage!,
-        title: _titleController.text.trim(),
-        content: _contentController.text.trim(),
-        topics: _selectedTopics,
-        authorId: authorId,
-      ),
-    );
+    if (isEdit) {
+      context.read<BlogBloc>().add(
+        BlogEdited(
+          id: widget.blog!.id,
+          image: _selectedImage!,
+          title: _titleController.text.trim(),
+          content: _contentController.text.trim(),
+          topics: _selectedTopics,
+          authorId: authorId,
+        ),
+      );
+    } else {
+      context.read<BlogBloc>().add(
+        BlogCreated(
+          image: _selectedImage!,
+          title: _titleController.text.trim(),
+          content: _contentController.text.trim(),
+          topics: _selectedTopics,
+          authorId: authorId,
+        ),
+      );
+    }
   }
 
   @override
@@ -86,7 +114,7 @@ class _ManageBlogPageState extends State<ManageBlogPage> {
         if (state.status == BlogStatus.success) {
           showSnackBar(
             context,
-            'Blog uploaded successfully',
+            'Blog ${isEdit ? 'updated' : 'uploaded'} successfully',
             SnackBarType.success,
           );
           context.pop();
@@ -94,7 +122,7 @@ class _ManageBlogPageState extends State<ManageBlogPage> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Add New Blog'),
+          title: Text(isEdit ? 'Edit Blog' : 'Add New Blog'),
           actions: [
             IconButton(
               onPressed: _onSubmit,
@@ -119,71 +147,14 @@ class _ManageBlogPageState extends State<ManageBlogPage> {
             child: Column(
               spacing: 24,
               children: [
-                GestureDetector(
-                  onTap: _onImageSelect,
-                  child: AspectRatio(
-                    aspectRatio: 16 / 9,
-                    child:
-                        _selectedImage == null
-                            ? DottedBorder(
-                              color: AppPallet.border,
-                              dashPattern: [16, 8],
-                              radius: const Radius.circular(12),
-                              borderType: BorderType.RRect,
-                              strokeCap: StrokeCap.round,
-                              child: Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  spacing: 16,
-                                  children: [
-                                    Icon(Icons.folder_open, size: 48),
-                                    Text(
-                                      'Select your image',
-                                      style: TextStyle(fontSize: 16),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            )
-                            : ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
-                              child: Image.file(
-                                _selectedImage!,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                  ),
+                BlogImagePicker(
+                  onImageSelect: _onImageSelect,
+                  selectedImage: _selectedImage,
+                  blog: widget.blog,
                 ),
-                SizedBox(
-                  height: 36,
-                  child: ListView.separated(
-                    itemCount: Lists.topics.length,
-                    scrollDirection: Axis.horizontal,
-                    separatorBuilder: (context, index) => SizedBox(width: 8),
-                    itemBuilder: (context, index) {
-                      final topic = Lists.topics[index];
-                      final isSelected = _selectedTopics.contains(topic);
-
-                      return GestureDetector(
-                        onTap: () => _onChipTap(topic),
-                        child: Chip(
-                          label: Text(topic),
-                          color: WidgetStateColor.resolveWith(
-                            (_) =>
-                                isSelected
-                                    ? AppPallet.gradient1
-                                    : AppPallet.background,
-                          ),
-                          side: BorderSide(
-                            color:
-                                isSelected
-                                    ? AppPallet.transparent
-                                    : AppPallet.border,
-                          ),
-                        ),
-                      );
-                    },
-                  ),
+                BlogTopicPicker(
+                  selectedTopics: _selectedTopics,
+                  onTap: _onChipTap,
                 ),
                 Column(
                   spacing: 16,

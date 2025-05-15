@@ -25,7 +25,7 @@ class AppRouter {
         routes: [
           GoRoute(
             path: Routes.blogManage,
-            builder: (context, state) => const ManageBlogPage(),
+            builder: (context, state) => ManageBlogPage(state.extra as Blog?),
           ),
           GoRoute(
             path: Routes.blogSingle,

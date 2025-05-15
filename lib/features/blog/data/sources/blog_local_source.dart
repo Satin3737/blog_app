@@ -6,6 +6,8 @@ abstract interface class BlogLocalSource {
 
   List<BlogModel> loadLocalBlogs();
 
+  void editLocalBlog(BlogModel blog);
+
   void deleteLocalBlog(BlogModel blog);
 }
 
@@ -40,10 +42,24 @@ class BlogLocalSourceImpl implements BlogLocalSource {
   }
 
   @override
+  void editLocalBlog(BlogModel blog) {
+    if (box.isEmpty) return;
+
+    box.write(() {
+      for (int i = 0; i < box.length; i++) {
+        if (box.get(i.toString())['id'] == blog.id) {
+          box.put(i.toString(), blog.toJson());
+          break;
+        }
+      }
+    });
+  }
+
+  @override
   void deleteLocalBlog(BlogModel blog) {
     if (box.isEmpty) return;
 
-    box.read(() {
+    box.write(() {
       for (int i = 0; i < box.length; i++) {
         if (box.get(i.toString())['id'] == blog.id) {
           box.delete(i.toString());
