@@ -33,9 +33,10 @@ class _ManageBlogPageState extends State<ManageBlogPage> {
   @override
   void initState() {
     super.initState();
-    isEdit = widget.blog is Blog && widget.blog != null;
+    isEdit = widget.blog != null;
 
     if (isEdit) {
+      context.read<BlogBloc>().add(BlogImageFetched(widget.blog!));
       _titleController.text = widget.blog!.title;
       _contentController.text = widget.blog!.content;
       _selectedTopics.addAll(widget.blog!.topics);
@@ -119,6 +120,11 @@ class _ManageBlogPageState extends State<ManageBlogPage> {
           );
           context.pop();
         }
+        if (state.status != BlogStatus.loading && state.currentImage != null) {
+          setState(() {
+            _selectedImage = state.currentImage;
+          });
+        }
       },
       child: Scaffold(
         appBar: AppBar(
@@ -150,7 +156,6 @@ class _ManageBlogPageState extends State<ManageBlogPage> {
                 BlogImagePicker(
                   onImageSelect: _onImageSelect,
                   selectedImage: _selectedImage,
-                  blog: widget.blog,
                 ),
                 BlogTopicPicker(
                   selectedTopics: _selectedTopics,

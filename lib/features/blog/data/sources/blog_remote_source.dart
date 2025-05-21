@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:blog_app/core/constants/tables.dart';
 import 'package:blog_app/core/error/exceptions.dart';
 import 'package:blog_app/features/blog/data/models/blog_model.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 abstract interface class BlogRemoteSource {
@@ -13,6 +14,8 @@ abstract interface class BlogRemoteSource {
   Future<BlogModel> editBlog(BlogModel blog);
 
   Future<BlogModel> deleteBlog(BlogModel blog);
+
+  Future<File> getBlogImage(BlogModel blog);
 
   Future<String> uploadBlogImage({
     required File image,
@@ -95,6 +98,27 @@ class BlogRemoteSourceImpl implements BlogRemoteSource {
       await supabaseClient.from(Tables.blogs).delete().eq('id', blog.id);
       return blog;
     } on PostgrestException catch (e) {
+      throw ServerException(e.message);
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<File> getBlogImage(BlogModel blog) async {
+    try {
+      final storage = supabaseClient.storage;
+      final uint8List = await storage.from(Tables.blogImages).download(blog.id);
+
+      final directory = await getApplicationDocumentsDirectory();
+      final folder = Directory('${directory.path}/${Tables.blogImages}');
+      if (!await folder.exists()) await folder.create();
+
+      final file = File('${folder.path}/${blog.id}.jpeg');
+      await file.writeAsBytes(uint8List);
+
+      return file;
+    } on StorageException catch (e) {
       throw ServerException(e.message);
     } catch (e) {
       throw ServerException(e.toString());

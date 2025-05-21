@@ -58,7 +58,7 @@ class _BlogPageState extends State<BlogPage> {
           onRefresh: () async => _fetchBlogs(),
           child: BlocBuilder<BlogBloc, BlogState>(
             builder: (context, state) {
-              if (state.status == BlogStatus.failure) {
+              if (state.status == BlogStatus.failure && state.blogs.isEmpty) {
                 return Center(
                   child: TextButton(
                     onPressed: _fetchBlogs,

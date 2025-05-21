@@ -67,6 +67,7 @@ void _initBlog() {
     ..registerLazySingleton<BlogCreate>(() => BlogCreate(sl()))
     ..registerLazySingleton<BlogEdit>(() => BlogEdit(sl()))
     ..registerLazySingleton<BlogDelete>(() => BlogDelete(sl()))
+    ..registerLazySingleton<BlogGetImage>(() => BlogGetImage(sl()))
     // bloc
     ..registerLazySingleton<BlogBloc>(
       () => BlogBloc(
@@ -74,6 +75,7 @@ void _initBlog() {
         blogCreate: sl(),
         blogEdit: sl(),
         blogDelete: sl(),
+        blogGetImage: sl(),
       ),
     );
 }

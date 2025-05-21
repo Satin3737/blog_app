@@ -46,3 +46,9 @@ final class BlogDeleted extends BlogEvent {
 
   const BlogDeleted(this.blog);
 }
+
+final class BlogImageFetched extends BlogEvent {
+  final Blog blog;
+
+  const BlogImageFetched(this.blog);
+}

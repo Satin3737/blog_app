@@ -5,7 +5,8 @@ import 'package:blog_app/features/blog/domain/entities/blog.dart';
 import 'package:blog_app/features/blog/domain/usecases/blog_create.dart';
 import 'package:blog_app/features/blog/domain/usecases/blog_delete.dart';
 import 'package:blog_app/features/blog/domain/usecases/blog_edit.dart';
-import 'package:blog_app/features/blog/domain/usecases/fetch_blogs.dart';
+import 'package:blog_app/features/blog/domain/usecases/blog_get_image.dart';
+import 'package:blog_app/features/blog/domain/usecases/blogs_fetch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,21 +18,25 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
   final BlogCreate _blogCreate;
   final BlogEdit _blogEdit;
   final BlogDelete _blogDelete;
+  final BlogGetImage _blogGetImage;
 
   BlogBloc({
     required BlogsFetch blogsFetch,
     required BlogCreate blogCreate,
     required BlogEdit blogEdit,
     required BlogDelete blogDelete,
+    required BlogGetImage blogGetImage,
   }) : _blogsFetch = blogsFetch,
        _blogCreate = blogCreate,
        _blogEdit = blogEdit,
        _blogDelete = blogDelete,
+       _blogGetImage = blogGetImage,
        super(const BlogState()) {
     on<BlogsFetched>(_onBlogsFetched);
     on<BlogCreated>(_onBlogCreated);
     on<BlogEdited>(_onBlogEdited);
     on<BlogDeleted>(_onBlogDeleted);
+    on<BlogImageFetched>(_onBlogImageFetched);
   }
 
   void _onBlogsFetched(BlogsFetched event, Emitter<BlogState> emit) async {
@@ -134,6 +139,28 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
             status: BlogStatus.success,
             blogs: state.blogs.where((b) => b.id != blog.id).toList(),
           ),
+        ),
+      );
+    } catch (e) {
+      emit(state.copyWith(status: BlogStatus.failure, error: e.toString()));
+    }
+  }
+
+  void _onBlogImageFetched(
+    BlogImageFetched event,
+    Emitter<BlogState> emit,
+  ) async {
+    emit(state.copyWith(status: BlogStatus.loading));
+
+    try {
+      final response = await _blogGetImage(BlogGetImageParams(event.blog));
+
+      response.fold(
+        (failure) => emit(
+          state.copyWith(status: BlogStatus.failure, error: failure.message),
+        ),
+        (image) => emit(
+          state.copyWith(status: BlogStatus.initial, currentImage: image),
         ),
       );
     } catch (e) {

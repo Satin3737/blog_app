@@ -25,4 +25,6 @@ abstract interface class BlogRepository {
   });
 
   Future<Either<Failure, Blog>> deleteBlog(Blog blog);
+
+  Future<Either<Failure, File>> getBlogImage(Blog blog);
 }

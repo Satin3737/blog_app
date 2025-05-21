@@ -132,4 +132,20 @@ class BlogRepositoryImpl implements BlogRepository {
       return Left(Failure(e.message));
     }
   }
+
+  @override
+  Future<Either<Failure, File>> getBlogImage(Blog blog) async {
+    try {
+      if (!await connectionChecker.isConnected) {
+        return Left(Failure(Messages.noConnectionError));
+      }
+
+      final blogModel = BlogModel.fromEntity(blog);
+      final image = await blogRemoteSource.getBlogImage(blogModel);
+
+      return Right(image);
+    } on ServerException catch (e) {
+      return Left(Failure(e.message));
+    }
+  }
 }
