@@ -101,6 +101,7 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
           content: event.content,
           topics: event.topics,
           authorId: event.authorId,
+          authorName: event.authorName,
         ),
       );
 

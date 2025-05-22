@@ -20,6 +20,7 @@ class BlogEdit implements UseCase<void, BlogEditParams> {
       content: params.content,
       topics: params.topics,
       authorId: params.authorId,
+      authorName: params.authorName,
     );
   }
 }
@@ -31,6 +32,7 @@ class BlogEditParams {
   final String content;
   final List<String> topics;
   final String authorId;
+  final String? authorName;
 
   const BlogEditParams({
     required this.id,
@@ -39,5 +41,6 @@ class BlogEditParams {
     required this.content,
     required this.topics,
     required this.authorId,
+    this.authorName,
   });
 }

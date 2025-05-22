@@ -71,9 +71,6 @@ class _ManageBlogPageState extends State<ManageBlogPage> {
       return;
     }
 
-    final authorId =
-        (context.read<AppUserCubit>().state as AppUserLoggedIn).user.id;
-
     if (isEdit) {
       context.read<BlogBloc>().add(
         BlogEdited(
@@ -82,10 +79,14 @@ class _ManageBlogPageState extends State<ManageBlogPage> {
           title: _titleController.text.trim(),
           content: _contentController.text.trim(),
           topics: _selectedTopics,
-          authorId: authorId,
+          authorId: widget.blog!.authorId,
+          authorName: widget.blog!.authorName,
         ),
       );
     } else {
+      final authorId =
+          (context.read<AppUserCubit>().state as AppUserLoggedIn).user.id;
+
       context.read<BlogBloc>().add(
         BlogCreated(
           image: _selectedImage!,

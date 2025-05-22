@@ -30,6 +30,7 @@ final class BlogEdited extends BlogEvent {
   final File image;
   final List<String> topics;
   final String authorId;
+  final String? authorName;
 
   const BlogEdited({
     required this.id,
@@ -38,6 +39,7 @@ final class BlogEdited extends BlogEvent {
     required this.image,
     required this.topics,
     required this.authorId,
+    this.authorName,
   });
 }
 

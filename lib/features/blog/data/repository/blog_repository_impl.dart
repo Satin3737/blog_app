@@ -85,6 +85,7 @@ class BlogRepositoryImpl implements BlogRepository {
     required String content,
     required List<String> topics,
     required String authorId,
+    String? authorName,
   }) async {
     try {
       if (!await connectionChecker.isConnected) {
@@ -99,6 +100,7 @@ class BlogRepositoryImpl implements BlogRepository {
         imageUrl: '',
         topics: topics,
         updatedAt: DateTime.now(),
+        authorName: authorName,
       );
 
       final imageUrl = await blogRemoteSource.updateBlogImage(
@@ -107,7 +109,9 @@ class BlogRepositoryImpl implements BlogRepository {
       );
 
       blogModel = blogModel.copyWith(imageUrl: imageUrl);
-      final updatedBlog = await blogRemoteSource.editBlog(blogModel);
+      final response = await blogRemoteSource.editBlog(blogModel);
+      final updatedBlog = response.copyWith(authorName: authorName);
+
       blogLocalSource.editLocalBlog(updatedBlog);
 
       return Right(updatedBlog);

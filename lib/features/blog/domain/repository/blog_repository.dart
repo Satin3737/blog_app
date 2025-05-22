@@ -22,6 +22,7 @@ abstract interface class BlogRepository {
     required String content,
     required List<String> topics,
     required String authorId,
+    String? authorName,
   });
 
   Future<Either<Failure, Blog>> deleteBlog(Blog blog);
