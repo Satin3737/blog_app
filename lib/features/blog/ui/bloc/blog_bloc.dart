@@ -32,6 +32,7 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
        _blogDelete = blogDelete,
        _blogGetImage = blogGetImage,
        super(const BlogState()) {
+    on<BlogEvent>(_onLoadingStarted);
     on<BlogsFetched>(_onBlogsFetched);
     on<BlogCreated>(_onBlogCreated);
     on<BlogEdited>(_onBlogEdited);
@@ -39,9 +40,11 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
     on<BlogImageFetched>(_onBlogImageFetched);
   }
 
-  void _onBlogsFetched(BlogsFetched event, Emitter<BlogState> emit) async {
+  void _onLoadingStarted(BlogEvent event, Emitter<BlogState> emit) {
     emit(state.copyWith(status: BlogStatus.loading));
+  }
 
+  void _onBlogsFetched(BlogsFetched event, Emitter<BlogState> emit) async {
     try {
       final response = await _blogsFetch(NoParams());
 
@@ -58,8 +61,6 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
   }
 
   void _onBlogCreated(BlogCreated event, Emitter<BlogState> emit) async {
-    emit(state.copyWith(status: BlogStatus.loading));
-
     try {
       final response = await _blogCreate(
         BlogCreateParams(
@@ -84,14 +85,14 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
           );
         },
       );
+
+      add(BlogsFetched());
     } catch (e) {
       emit(state.copyWith(status: BlogStatus.failure, error: e.toString()));
     }
   }
 
   void _onBlogEdited(BlogEdited event, Emitter<BlogState> emit) async {
-    emit(state.copyWith(status: BlogStatus.loading));
-
     try {
       final response = await _blogEdit(
         BlogEditParams(
@@ -120,14 +121,14 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
           );
         },
       );
+
+      add(BlogsFetched());
     } catch (e) {
       emit(state.copyWith(status: BlogStatus.failure, error: e.toString()));
     }
   }
 
   void _onBlogDeleted(BlogDeleted event, Emitter<BlogState> emit) async {
-    emit(state.copyWith(status: BlogStatus.loading));
-
     try {
       final response = await _blogDelete(BlogDeleteParams(event.blog));
 
@@ -142,6 +143,8 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
           ),
         ),
       );
+
+      add(BlogsFetched());
     } catch (e) {
       emit(state.copyWith(status: BlogStatus.failure, error: e.toString()));
     }
@@ -151,8 +154,6 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
     BlogImageFetched event,
     Emitter<BlogState> emit,
   ) async {
-    emit(state.copyWith(status: BlogStatus.loading));
-
     try {
       final response = await _blogGetImage(BlogGetImageParams(event.blog));
 
