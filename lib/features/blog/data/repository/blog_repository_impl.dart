@@ -80,11 +80,12 @@ class BlogRepositoryImpl implements BlogRepository {
   @override
   Future<Either<Failure, Blog>> editBlog({
     required String id,
-    required File image,
     required String title,
     required String content,
     required List<String> topics,
     required String authorId,
+    File? image,
+    String? oldImage,
     String? authorName,
   }) async {
     try {
@@ -103,10 +104,14 @@ class BlogRepositoryImpl implements BlogRepository {
         authorName: authorName,
       );
 
-      final imageUrl = await blogRemoteSource.updateBlogImage(
-        image: image,
-        blog: blogModel,
-      );
+      String imageUrl = oldImage ?? '';
+
+      if (image != null) {
+        imageUrl = await blogRemoteSource.updateBlogImage(
+          image: image,
+          blog: blogModel,
+        );
+      }
 
       blogModel = blogModel.copyWith(imageUrl: imageUrl);
       final response = await blogRemoteSource.editBlog(blogModel);
@@ -132,22 +137,6 @@ class BlogRepositoryImpl implements BlogRepository {
       blogLocalSource.deleteLocalBlog(blogModel);
 
       return Right(blog);
-    } on ServerException catch (e) {
-      return Left(Failure(e.message));
-    }
-  }
-
-  @override
-  Future<Either<Failure, File>> getBlogImage(Blog blog) async {
-    try {
-      if (!await connectionChecker.isConnected) {
-        return Left(Failure(Messages.noConnectionError));
-      }
-
-      final blogModel = BlogModel.fromEntity(blog);
-      final image = await blogRemoteSource.getBlogImage(blogModel);
-
-      return Right(image);
     } on ServerException catch (e) {
       return Left(Failure(e.message));
     }

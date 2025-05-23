@@ -36,7 +36,6 @@ class _ManageBlogPageState extends State<ManageBlogPage> {
     isEdit = widget.blog != null;
 
     if (isEdit) {
-      context.read<BlogBloc>().add(BlogImageFetched(widget.blog!));
       _titleController.text = widget.blog!.title;
       _contentController.text = widget.blog!.content;
       _selectedTopics.addAll(widget.blog!.topics);
@@ -61,7 +60,7 @@ class _ManageBlogPageState extends State<ManageBlogPage> {
   void _onSubmit() {
     if (!_formKey.currentState!.validate()) return;
 
-    if (_selectedImage == null) {
+    if (_selectedImage == null && !isEdit) {
       showSnackBar(context, 'Please select an image');
       return;
     }
@@ -75,11 +74,12 @@ class _ManageBlogPageState extends State<ManageBlogPage> {
       context.read<BlogBloc>().add(
         BlogEdited(
           id: widget.blog!.id,
-          image: _selectedImage!,
           title: _titleController.text.trim(),
           content: _contentController.text.trim(),
           topics: _selectedTopics,
           authorId: widget.blog!.authorId,
+          image: _selectedImage,
+          oldImage: widget.blog!.imageUrl,
           authorName: widget.blog!.authorName,
         ),
       );
@@ -121,11 +121,6 @@ class _ManageBlogPageState extends State<ManageBlogPage> {
           );
           context.pop();
         }
-        if (state.status != BlogStatus.loading && state.currentImage != null) {
-          setState(() {
-            _selectedImage = state.currentImage;
-          });
-        }
       },
       child: Scaffold(
         appBar: AppBar(
@@ -157,6 +152,7 @@ class _ManageBlogPageState extends State<ManageBlogPage> {
                 BlogImagePicker(
                   onImageSelect: _onImageSelect,
                   selectedImage: _selectedImage,
+                  blog: widget.blog,
                 ),
                 BlogTopicPicker(
                   selectedTopics: _selectedTopics,

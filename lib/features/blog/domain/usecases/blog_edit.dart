@@ -15,11 +15,12 @@ class BlogEdit implements UseCase<void, BlogEditParams> {
   Future<Either<Failure, Blog>> call(BlogEditParams params) async {
     return await blogRepository.editBlog(
       id: params.id,
-      image: params.image,
       title: params.title,
       content: params.content,
       topics: params.topics,
       authorId: params.authorId,
+      image: params.image,
+      oldImage: params.oldImage,
       authorName: params.authorName,
     );
   }
@@ -27,20 +28,22 @@ class BlogEdit implements UseCase<void, BlogEditParams> {
 
 class BlogEditParams {
   final String id;
-  final File image;
   final String title;
   final String content;
   final List<String> topics;
   final String authorId;
+  final File? image;
+  final String? oldImage;
   final String? authorName;
 
   const BlogEditParams({
     required this.id,
-    required this.image,
     required this.title,
     required this.content,
     required this.topics,
     required this.authorId,
+    this.image,
+    this.oldImage,
     this.authorName,
   });
 }
