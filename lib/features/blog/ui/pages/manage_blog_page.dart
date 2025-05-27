@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:blog_app/core/common/cubits/user/app_user_cubit.dart';
 import 'package:blog_app/core/common/widgets/linear_loader.dart';
+import 'package:blog_app/core/router/routes.dart';
 import 'package:blog_app/core/utils/pick_image.dart';
 import 'package:blog_app/core/utils/show_snackbar.dart';
 import 'package:blog_app/features/blog/domain/entities/blog.dart';
@@ -119,7 +120,7 @@ class _ManageBlogPageState extends State<ManageBlogPage> {
             'Blog ${isEdit ? 'updated' : 'uploaded'} successfully',
             SnackBarType.success,
           );
-          context.pop();
+          context.go(Routes.blog);
         }
       },
       child: Scaffold(
