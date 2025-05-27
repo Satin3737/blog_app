@@ -78,10 +78,10 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
               blogs: [blog, ...state.blogs],
             ),
           );
+
+          add(BlogsFetched());
         },
       );
-
-      add(BlogsFetched());
     } catch (e) {
       emit(state.copyWith(status: BlogStatus.failure, error: e.toString()));
     }
@@ -115,10 +115,10 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
                     ..sort((a, b) => b.updatedAt.compareTo(a.updatedAt)),
             ),
           );
+
+          add(BlogsFetched());
         },
       );
-
-      add(BlogsFetched());
     } catch (e) {
       emit(state.copyWith(status: BlogStatus.failure, error: e.toString()));
     }
@@ -132,15 +132,17 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
         (failure) => emit(
           state.copyWith(status: BlogStatus.failure, error: failure.message),
         ),
-        (blog) => emit(
-          state.copyWith(
-            status: BlogStatus.success,
-            blogs: state.blogs.where((b) => b.id != blog.id).toList(),
-          ),
-        ),
-      );
+        (blog) {
+          emit(
+            state.copyWith(
+              status: BlogStatus.success,
+              blogs: state.blogs.where((b) => b.id != blog.id).toList(),
+            ),
+          );
 
-      add(BlogsFetched());
+          add(BlogsFetched());
+        },
+      );
     } catch (e) {
       emit(state.copyWith(status: BlogStatus.failure, error: e.toString()));
     }
