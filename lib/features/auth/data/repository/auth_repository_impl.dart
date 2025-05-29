@@ -49,7 +49,7 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   AsyncUserResult getCurrentUserData() async {
     try {
-      if (!await connectionChecker.isConnected) {
+      if (!connectionChecker.isConnected) {
         final session = authRemoteSource.currentSession;
         if (session == null) return Left(Failure(Messages.noConnectionError));
         final user = session.user;
@@ -66,7 +66,7 @@ class AuthRepositoryImpl implements AuthRepository {
 
   AsyncUserResult _getUser(Future<User> Function() userRequest) async {
     try {
-      if (!await connectionChecker.isConnected) {
+      if (!connectionChecker.isConnected) {
         return Left(Failure(Messages.noConnectionError));
       }
 

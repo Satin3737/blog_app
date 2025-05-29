@@ -26,7 +26,7 @@ class BlogRepositoryImpl implements BlogRepository {
   @override
   Future<Either<Failure, List<Blog>>> fetchBlogs() async {
     try {
-      if (!await connectionChecker.isConnected) {
+      if (!connectionChecker.isConnected) {
         return Right(blogLocalSource.loadLocalBlogs());
       }
 
@@ -48,7 +48,7 @@ class BlogRepositoryImpl implements BlogRepository {
     required String authorId,
   }) async {
     try {
-      if (!await connectionChecker.isConnected) {
+      if (!connectionChecker.isConnected) {
         return Left(Failure(Messages.noConnectionError));
       }
 
@@ -89,7 +89,7 @@ class BlogRepositoryImpl implements BlogRepository {
     String? authorName,
   }) async {
     try {
-      if (!await connectionChecker.isConnected) {
+      if (!connectionChecker.isConnected) {
         return Left(Failure(Messages.noConnectionError));
       }
 
@@ -128,7 +128,7 @@ class BlogRepositoryImpl implements BlogRepository {
   @override
   Future<Either<Failure, Blog>> deleteBlog(Blog blog) async {
     try {
-      if (!await connectionChecker.isConnected) {
+      if (!connectionChecker.isConnected) {
         return Left(Failure(Messages.noConnectionError));
       }
 

@@ -1,10 +1,26 @@
+import 'dart:async';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/material.dart';
 
-class ConnectionChecker {
-  final Connectivity connectivity = Connectivity();
+class ConnectionChecker extends ChangeNotifier {
+  late final StreamSubscription<List<ConnectivityResult>> subscription;
+  late ConnectivityResult _lastResult = ConnectivityResult.none;
 
-  Future<bool> get isConnected async {
-    final result = await connectivity.checkConnectivity();
-    return !result.contains(ConnectivityResult.none);
+  ConnectionChecker() {
+    subscription = Connectivity().onConnectivityChanged.listen((
+      List<ConnectivityResult> result,
+    ) {
+      _lastResult = result.isNotEmpty ? result.first : ConnectivityResult.none;
+      notifyListeners();
+    });
+  }
+
+  bool get isConnected => _lastResult != ConnectivityResult.none;
+
+  @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
   }
 }

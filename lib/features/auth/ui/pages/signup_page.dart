@@ -1,5 +1,5 @@
 import 'package:blog_app/core/common/widgets/loader.dart';
-import 'package:blog_app/core/utils/show_snackbar.dart';
+import 'package:blog_app/core/utils/snackbar_service.dart';
 import 'package:blog_app/features/auth/ui/bloc/auth_bloc.dart';
 import 'package:blog_app/features/auth/ui/widgets/auth_button.dart';
 import 'package:blog_app/features/auth/ui/widgets/auth_field.dart';
@@ -49,7 +49,9 @@ class _SignUpPageState extends State<SignUpPage> {
             padding: const EdgeInsets.symmetric(vertical: 48, horizontal: 16),
             child: BlocConsumer<AuthBloc, AuthState>(
               listener: (context, state) {
-                if (state is AuthFailure) showSnackBar(context, state.message);
+                if (state is AuthFailure) {
+                  SnackBarService.showSnackBar(context, state.message);
+                }
               },
               builder: (context, state) {
                 if (state is AuthCurrentUserLoading) return const Loader();

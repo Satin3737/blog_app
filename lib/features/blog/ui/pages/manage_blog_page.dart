@@ -4,7 +4,7 @@ import 'package:blog_app/core/common/cubits/user/app_user_cubit.dart';
 import 'package:blog_app/core/common/widgets/linear_loader.dart';
 import 'package:blog_app/core/router/routes.dart';
 import 'package:blog_app/core/utils/pick_image.dart';
-import 'package:blog_app/core/utils/show_snackbar.dart';
+import 'package:blog_app/core/utils/snackbar_service.dart';
 import 'package:blog_app/features/blog/domain/entities/blog.dart';
 import 'package:blog_app/features/blog/ui/bloc/blog_bloc.dart';
 import 'package:blog_app/features/blog/ui/widgets/blog_field.dart';
@@ -62,12 +62,12 @@ class _ManageBlogPageState extends State<ManageBlogPage> {
     if (!_formKey.currentState!.validate()) return;
 
     if (_selectedImage == null && !isEdit) {
-      showSnackBar(context, 'Please select an image');
+      SnackBarService.showSnackBar(context, 'Please select an image');
       return;
     }
 
     if (_selectedTopics.isEmpty) {
-      showSnackBar(context, 'Please select at least one topic');
+      SnackBarService.showSnackBar(context, 'Please select at least one topic');
       return;
     }
 
@@ -109,41 +109,39 @@ class _ManageBlogPageState extends State<ManageBlogPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<BlogBloc, BlogState>(
-      listener: (context, state) {
-        if (state.status == BlogStatus.failure) {
-          showSnackBar(context, state.error);
-        }
-        if (state.status == BlogStatus.success) {
-          showSnackBar(
-            context,
-            'Blog ${isEdit ? 'updated' : 'uploaded'} successfully',
-            SnackBarType.success,
-          );
-          context.go(Routes.blog);
-        }
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(isEdit ? 'Edit Blog' : 'Add New Blog'),
-          actions: [
-            IconButton(
-              onPressed: _onSubmit,
-              icon: const Icon(Icons.done_rounded),
-            ),
-          ],
-          bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(4),
-            child: BlocBuilder<BlogBloc, BlogState>(
-              builder: (context, state) {
-                return LinearLoader(
-                  loading: state.status == BlogStatus.loading,
-                );
-              },
-            ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(isEdit ? 'Edit Blog' : 'Add New Blog'),
+        actions: [
+          IconButton(
+            onPressed: _onSubmit,
+            icon: const Icon(Icons.done_rounded),
+          ),
+        ],
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(4),
+          child: BlocBuilder<BlogBloc, BlogState>(
+            builder: (context, state) {
+              return LinearLoader(loading: state.status == BlogStatus.loading);
+            },
           ),
         ),
-        body: SingleChildScrollView(
+      ),
+      body: BlocListener<BlogBloc, BlogState>(
+        listener: (context, state) {
+          if (state.status == BlogStatus.failure) {
+            SnackBarService.showSnackBar(context, state.error);
+          }
+          if (state.status == BlogStatus.success) {
+            SnackBarService.showSnackBar(
+              context,
+              'Blog ${isEdit ? 'updated' : 'uploaded'} successfully',
+              SnackBarType.success,
+            );
+            context.go(Routes.blog);
+          }
+        },
+        child: SingleChildScrollView(
           padding: EdgeInsets.all(16),
           child: Form(
             key: _formKey,

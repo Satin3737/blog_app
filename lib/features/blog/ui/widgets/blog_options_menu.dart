@@ -1,3 +1,4 @@
+import 'package:blog_app/core/common/cubits/connection/app_connection_cubit.dart';
 import 'package:blog_app/core/common/cubits/user/app_user_cubit.dart';
 import 'package:blog_app/core/router/routes.dart';
 import 'package:blog_app/features/blog/domain/entities/blog.dart';
@@ -27,25 +28,33 @@ class BlogOptionsMenu extends StatelessWidget {
           return Positioned(
             bottom: 0,
             right: 0,
-            child: PopupMenuButton(
-              menuPadding: EdgeInsets.zero,
-              itemBuilder: (context) {
-                return [
-                  PopupMenuItem(
-                    onTap: onBlogEdit,
-                    child: const Row(
-                      spacing: 8,
-                      children: [Icon(Icons.edit, size: 24), Text('Edit')],
-                    ),
-                  ),
-                  PopupMenuItem(
-                    onTap: onBlogDelete,
-                    child: const Row(
-                      spacing: 8,
-                      children: [Icon(Icons.delete, size: 24), Text('Delete')],
-                    ),
-                  ),
-                ];
+            child: BlocBuilder<AppConnectionCubit, AppConnectionState>(
+              builder: (context, state) {
+                return PopupMenuButton(
+                  enabled: state is AppConnectionConnected,
+                  menuPadding: EdgeInsets.zero,
+                  itemBuilder: (context) {
+                    return [
+                      PopupMenuItem(
+                        onTap: onBlogEdit,
+                        child: const Row(
+                          spacing: 8,
+                          children: [Icon(Icons.edit, size: 24), Text('Edit')],
+                        ),
+                      ),
+                      PopupMenuItem(
+                        onTap: onBlogDelete,
+                        child: const Row(
+                          spacing: 8,
+                          children: [
+                            Icon(Icons.delete, size: 24),
+                            Text('Delete'),
+                          ],
+                        ),
+                      ),
+                    ];
+                  },
+                );
               },
             ),
           );

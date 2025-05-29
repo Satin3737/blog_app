@@ -25,6 +25,7 @@ Future<void> _initBase() async {
 void _initCore() {
   sl
     ..registerLazySingleton<ConnectionChecker>(() => ConnectionChecker())
+    ..registerLazySingleton<AppConnectionCubit>(() => AppConnectionCubit(sl()))
     ..registerLazySingleton<AppUserCubit>(() => AppUserCubit());
 }
 

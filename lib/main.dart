@@ -1,6 +1,9 @@
+import 'package:blog_app/core/common/cubits/connection/app_connection_cubit.dart';
 import 'package:blog_app/core/common/cubits/user/app_user_cubit.dart';
+import 'package:blog_app/core/constants/messages.dart';
 import 'package:blog_app/core/router/app_router.dart';
 import 'package:blog_app/core/theme/theme.dart';
+import 'package:blog_app/core/utils/snackbar_service.dart';
 import 'package:blog_app/dependencies/dependencies.dart';
 import 'package:blog_app/features/auth/ui/bloc/auth_bloc.dart';
 import 'package:blog_app/features/blog/ui/bloc/blog_bloc.dart';
@@ -14,6 +17,7 @@ Future<void> main() async {
   runApp(
     MultiBlocProvider(
       providers: [
+        BlocProvider(create: (_) => sl<AppConnectionCubit>()),
         BlocProvider(create: (_) => sl<AppUserCubit>()),
         BlocProvider(create: (_) => sl<AuthBloc>()),
         BlocProvider(create: (_) => sl<BlogBloc>()),
@@ -39,15 +43,19 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AppUserCubit, AppUserState>(
-      builder: (context, state) {
-        return MaterialApp.router(
-          routerConfig: AppRouter.router(state is AppUserLoggedIn),
-          title: 'Blog App',
-          debugShowCheckedModeBanner: false,
-          theme: AppTheme.darkTheme,
-        );
+    return BlocListener<AppConnectionCubit, AppConnectionState>(
+      listener: (BuildContext context, state) {
+        if (state is AppConnectionDisconnected) {
+          SnackBarService.showRootSnackBar(Messages.noConnectionError);
+        }
       },
+      child: MaterialApp.router(
+        routerConfig: appRouter,
+        title: 'Blog App',
+        debugShowCheckedModeBanner: false,
+        theme: AppTheme.darkTheme,
+        scaffoldMessengerKey: SnackBarService.rootMessengerKey,
+      ),
     );
   }
 }

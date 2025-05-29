@@ -1,7 +1,8 @@
+import 'package:blog_app/core/common/cubits/connection/app_connection_cubit.dart';
 import 'package:blog_app/core/common/widgets/linear_loader.dart';
 import 'package:blog_app/core/router/routes.dart';
 import 'package:blog_app/core/theme/app_pallet.dart';
-import 'package:blog_app/core/utils/show_snackbar.dart';
+import 'package:blog_app/core/utils/snackbar_service.dart';
 import 'package:blog_app/features/blog/ui/bloc/blog_bloc.dart';
 import 'package:blog_app/features/blog/ui/widgets/blog_card.dart';
 import 'package:flutter/material.dart';
@@ -28,33 +29,36 @@ class _BlogPageState extends State<BlogPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<BlogBloc, BlogState>(
-      listener: (context, state) {
-        if (state.status == BlogStatus.failure) {
-          showSnackBar(context, state.error);
-        }
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('Blog App'),
-          actions: [
-            IconButton(
-              onPressed: _onAddNewBlog,
-              icon: const Icon(Icons.add_rounded),
-            ),
-          ],
-          bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(4),
-            child: BlocBuilder<BlogBloc, BlogState>(
-              builder: (context, state) {
-                return LinearLoader(
-                  loading: state.status == BlogStatus.loading,
-                );
-              },
-            ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Blog App'),
+        actions: [
+          BlocBuilder<AppConnectionCubit, AppConnectionState>(
+            builder: (context, state) {
+              final isConnected = state is AppConnectionConnected;
+              return IconButton(
+                onPressed: isConnected ? _onAddNewBlog : null,
+                icon: const Icon(Icons.add_rounded),
+              );
+            },
+          ),
+        ],
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(4),
+          child: BlocBuilder<BlogBloc, BlogState>(
+            builder: (context, state) {
+              return LinearLoader(loading: state.status == BlogStatus.loading);
+            },
           ),
         ),
-        body: RefreshIndicator(
+      ),
+      body: BlocListener<BlogBloc, BlogState>(
+        listener: (context, state) {
+          if (state.status == BlogStatus.failure) {
+            SnackBarService.showSnackBar(context, state.error);
+          }
+        },
+        child: RefreshIndicator(
           onRefresh: () async => _fetchBlogs(),
           child: BlocBuilder<BlogBloc, BlogState>(
             builder: (context, state) {
