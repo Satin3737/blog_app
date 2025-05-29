@@ -7,10 +7,14 @@ class LinearLoader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedOpacity(
-      opacity: loading ? 1 : 0,
+    return AnimatedSwitcher(
       duration: const Duration(milliseconds: 300),
-      child: const LinearProgressIndicator(),
+      switchInCurve: Curves.easeIn,
+      switchOutCurve: Curves.easeOut,
+      child:
+          loading
+              ? const LinearProgressIndicator(key: ValueKey('loader'))
+              : const SizedBox.shrink(key: ValueKey('empty')),
     );
   }
 }
