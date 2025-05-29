@@ -1,7 +1,11 @@
 import 'package:blog_app/core/common/entities/user.dart';
 
 class UserModel extends User {
-  UserModel({required super.id, required super.email, required super.name});
+  const UserModel({
+    required super.id,
+    required super.email,
+    required super.name,
+  });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
