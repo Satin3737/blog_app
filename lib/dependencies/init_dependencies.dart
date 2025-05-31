@@ -27,7 +27,7 @@ void _initCore() {
   sl
     ..registerLazySingleton<ConnectionChecker>(() => ConnectionChecker())
     ..registerLazySingleton<AppConnectionCubit>(() => AppConnectionCubit(sl()))
-    ..registerLazySingleton<AppUserCubit>(() => AppUserCubit());
+    ..registerLazySingleton<UserCubit>(() => UserCubit());
 }
 
 // core features
@@ -63,7 +63,7 @@ void _initAuth() {
         authSignUpUseCase: sl(),
         authSignInUseCase: sl(),
         userGetDataUseCase: sl(),
-        appUserCubit: sl(),
+        userCubit: sl(),
       ),
     );
 }

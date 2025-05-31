@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:blog_app/core/cubits/user/app_user_cubit.dart';
+import 'package:blog_app/core/features/user/ui/bloc/user_cubit.dart';
 import 'package:blog_app/core/router/routes.dart';
 import 'package:blog_app/core/utils/pick_image.dart';
 import 'package:blog_app/core/utils/snackbar_service.dart';
@@ -86,7 +86,7 @@ class _ManageBlogPageState extends State<ManageBlogPage> {
       );
     } else {
       final authorId =
-          (context.read<AppUserCubit>().state as AppUserLoggedIn).user.id;
+          (context.read<UserCubit>().state as UserLoggedIn).user.id;
 
       context.read<BlogBloc>().add(
         BlogCreated(

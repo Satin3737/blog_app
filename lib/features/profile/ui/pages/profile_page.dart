@@ -1,5 +1,5 @@
 import 'package:blog_app/core/cubits/connection/app_connection_cubit.dart';
-import 'package:blog_app/core/cubits/user/app_user_cubit.dart';
+import 'package:blog_app/core/features/user/ui/bloc/user_cubit.dart';
 import 'package:blog_app/core/theme/app_pallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,10 +9,10 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AppUserCubit, AppUserState>(
-      listener: (BuildContext context, AppUserState state) {},
+    return BlocConsumer<UserCubit, UserState>(
+      listener: (BuildContext context, UserState state) {},
       builder: (context, state) {
-        final user = (state as AppUserLoggedIn).user;
+        final user = (state as UserLoggedIn).user;
         return Scaffold(
           appBar: AppBar(
             title: Text('Profile'),

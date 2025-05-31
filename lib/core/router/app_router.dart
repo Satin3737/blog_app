@@ -1,4 +1,4 @@
-import 'package:blog_app/core/cubits/user/app_user_cubit.dart';
+import 'package:blog_app/core/features/user/ui/bloc/user_cubit.dart';
 import 'package:blog_app/core/router/routes.dart';
 import 'package:blog_app/core/router/widgets/route_with_nested_navigation.dart';
 import 'package:blog_app/core/utils/stream_to_listenable.dart';
@@ -67,9 +67,9 @@ final GoRouter appRouter = GoRouter(
       ],
     ),
   ],
-  refreshListenable: StreamToListenable([sl<AppUserCubit>().stream]),
+  refreshListenable: StreamToListenable([sl<UserCubit>().stream]),
   redirect: (context, state) {
-    final isUser = sl<AppUserCubit>().state is AppUserLoggedIn;
+    final isUser = sl<UserCubit>().state is UserLoggedIn;
     final route = state.uri.path;
     final isAuthPages = route == Routes.signIn || route == Routes.signUp;
 

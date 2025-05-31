@@ -1,6 +1,6 @@
 import 'package:blog_app/core/constants/messages.dart';
 import 'package:blog_app/core/cubits/connection/app_connection_cubit.dart';
-import 'package:blog_app/core/cubits/user/app_user_cubit.dart';
+import 'package:blog_app/core/features/user/ui/bloc/user_cubit.dart';
 import 'package:blog_app/core/router/app_router.dart';
 import 'package:blog_app/core/theme/theme.dart';
 import 'package:blog_app/core/utils/snackbar_service.dart';
@@ -18,7 +18,7 @@ Future<void> main() async {
     MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => sl<AppConnectionCubit>()),
-        BlocProvider(create: (_) => sl<AppUserCubit>()),
+        BlocProvider(create: (_) => sl<UserCubit>()),
         BlocProvider(create: (_) => sl<AuthBloc>()),
         BlocProvider(create: (_) => sl<BlogBloc>()),
       ],

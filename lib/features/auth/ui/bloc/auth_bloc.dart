@@ -1,6 +1,6 @@
-import 'package:blog_app/core/cubits/user/app_user_cubit.dart';
 import 'package:blog_app/core/features/user/domain/entities/user.dart';
 import 'package:blog_app/core/features/user/domain/usecases/user_get_data.dart';
+import 'package:blog_app/core/features/user/ui/bloc/user_cubit.dart';
 import 'package:blog_app/core/usecase/usecase.dart';
 import 'package:blog_app/features/auth/domain/usecases/auth_signin_usecase.dart';
 import 'package:blog_app/features/auth/domain/usecases/auth_signup_usecase.dart';
@@ -14,17 +14,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthSignUpUseCase _authSignUpUseCase;
   final AuthSignInUseCase _authSignInUseCase;
   final UserGetDataUseCase _userGetDataUseCase;
-  final AppUserCubit _appUserCubit;
+  final UserCubit _userCubit;
 
   AuthBloc({
     required AuthSignUpUseCase authSignUpUseCase,
     required AuthSignInUseCase authSignInUseCase,
     required UserGetDataUseCase userGetDataUseCase,
-    required AppUserCubit appUserCubit,
+    required UserCubit userCubit,
   }) : _authSignUpUseCase = authSignUpUseCase,
        _authSignInUseCase = authSignInUseCase,
        _userGetDataUseCase = userGetDataUseCase,
-       _appUserCubit = appUserCubit,
+       _userCubit = userCubit,
        super(AuthInitial()) {
     on<AuthEvent>((_, emit) => emit(AuthLoading()));
     on<AuthSignUp>(_onSignUp);
@@ -73,7 +73,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   void _emitAuthSuccess(User user, Emitter<AuthState> emit) {
-    _appUserCubit.updateUser(user);
+    _userCubit.updateUser(user);
     emit(AuthSuccess(user));
   }
 }

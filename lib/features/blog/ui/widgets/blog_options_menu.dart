@@ -1,5 +1,5 @@
 import 'package:blog_app/core/cubits/connection/app_connection_cubit.dart';
-import 'package:blog_app/core/cubits/user/app_user_cubit.dart';
+import 'package:blog_app/core/features/user/ui/bloc/user_cubit.dart';
 import 'package:blog_app/core/router/routes.dart';
 import 'package:blog_app/features/blog/domain/entities/blog.dart';
 import 'package:blog_app/features/blog/ui/bloc/blog_bloc.dart';
@@ -22,9 +22,9 @@ class BlogOptionsMenu extends StatelessWidget {
       context.read<BlogBloc>().add(BlogDeleted(blog));
     }
 
-    return BlocBuilder<AppUserCubit, AppUserState>(
+    return BlocBuilder<UserCubit, UserState>(
       builder: (context, state) {
-        if ((state as AppUserLoggedIn).user.id == blog.authorId) {
+        if ((state as UserLoggedIn).user.id == blog.authorId) {
           return Positioned(
             bottom: 0,
             right: 0,

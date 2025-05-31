@@ -1,11 +1,11 @@
 import 'package:blog_app/core/constants/tables.dart';
 import 'package:blog_app/core/cubits/connection/app_connection_cubit.dart';
-import 'package:blog_app/core/cubits/user/app_user_cubit.dart';
 import 'package:blog_app/core/features/user/data/repository/user_repository_impl.dart';
 import 'package:blog_app/core/features/user/data/sources/user_remote_source.dart';
 import 'package:blog_app/core/features/user/domain/repository/user_repository.dart';
 import 'package:blog_app/core/features/user/domain/usecases/user_get_data.dart';
 import 'package:blog_app/core/features/user/domain/usecases/user_signout.dart';
+import 'package:blog_app/core/features/user/ui/bloc/user_cubit.dart';
 import 'package:blog_app/core/secrets/app_secrets.dart';
 import 'package:blog_app/core/utils/connection_checker.dart';
 import 'package:blog_app/features/auth/data/repository/auth_repository_impl.dart';
