@@ -1,5 +1,5 @@
-import 'package:blog_app/core/common/widgets/loader.dart';
 import 'package:blog_app/core/theme/app_pallet.dart';
+import 'package:blog_app/core/widgets/loader.dart';
 import 'package:flutter/material.dart';
 
 class ImageLoader extends StatelessWidget {

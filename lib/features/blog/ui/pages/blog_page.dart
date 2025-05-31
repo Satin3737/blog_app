@@ -1,8 +1,8 @@
-import 'package:blog_app/core/common/cubits/connection/app_connection_cubit.dart';
-import 'package:blog_app/core/common/widgets/linear_loader.dart';
+import 'package:blog_app/core/cubits/connection/app_connection_cubit.dart';
 import 'package:blog_app/core/router/routes.dart';
 import 'package:blog_app/core/theme/app_pallet.dart';
 import 'package:blog_app/core/utils/snackbar_service.dart';
+import 'package:blog_app/core/widgets/linear_loader.dart';
 import 'package:blog_app/features/blog/ui/bloc/blog_bloc.dart';
 import 'package:blog_app/features/blog/ui/widgets/blog_card.dart';
 import 'package:flutter/material.dart';

@@ -1,10 +1,10 @@
 import 'dart:io';
 
-import 'package:blog_app/core/common/cubits/user/app_user_cubit.dart';
-import 'package:blog_app/core/common/widgets/linear_loader.dart';
+import 'package:blog_app/core/cubits/user/app_user_cubit.dart';
 import 'package:blog_app/core/router/routes.dart';
 import 'package:blog_app/core/utils/pick_image.dart';
 import 'package:blog_app/core/utils/snackbar_service.dart';
+import 'package:blog_app/core/widgets/linear_loader.dart';
 import 'package:blog_app/features/blog/domain/entities/blog.dart';
 import 'package:blog_app/features/blog/ui/bloc/blog_bloc.dart';
 import 'package:blog_app/features/blog/ui/widgets/blog_field.dart';

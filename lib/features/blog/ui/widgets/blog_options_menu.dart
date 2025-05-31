@@ -1,5 +1,5 @@
-import 'package:blog_app/core/common/cubits/connection/app_connection_cubit.dart';
-import 'package:blog_app/core/common/cubits/user/app_user_cubit.dart';
+import 'package:blog_app/core/cubits/connection/app_connection_cubit.dart';
+import 'package:blog_app/core/cubits/user/app_user_cubit.dart';
 import 'package:blog_app/core/router/routes.dart';
 import 'package:blog_app/features/blog/domain/entities/blog.dart';
 import 'package:blog_app/features/blog/ui/bloc/blog_bloc.dart';

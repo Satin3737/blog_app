@@ -1,5 +1,5 @@
-import 'package:blog_app/core/common/cubits/connection/app_connection_cubit.dart';
-import 'package:blog_app/core/common/cubits/user/app_user_cubit.dart';
+import 'package:blog_app/core/cubits/connection/app_connection_cubit.dart';
+import 'package:blog_app/core/cubits/user/app_user_cubit.dart';
 import 'package:blog_app/core/theme/app_pallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

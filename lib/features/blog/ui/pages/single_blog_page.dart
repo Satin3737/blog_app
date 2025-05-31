@@ -1,7 +1,7 @@
-import 'package:blog_app/core/common/widgets/image_loader.dart';
 import 'package:blog_app/core/theme/app_pallet.dart';
 import 'package:blog_app/core/utils/calc_reading_time.dart';
 import 'package:blog_app/core/utils/format_date.dart';
+import 'package:blog_app/core/widgets/image_loader.dart';
 import 'package:blog_app/features/blog/domain/entities/blog.dart';
 import 'package:flutter/material.dart';
 

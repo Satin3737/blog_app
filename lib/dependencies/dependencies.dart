@@ -1,6 +1,6 @@
-import 'package:blog_app/core/common/cubits/connection/app_connection_cubit.dart';
-import 'package:blog_app/core/common/cubits/user/app_user_cubit.dart';
 import 'package:blog_app/core/constants/tables.dart';
+import 'package:blog_app/core/cubits/connection/app_connection_cubit.dart';
+import 'package:blog_app/core/cubits/user/app_user_cubit.dart';
 import 'package:blog_app/core/features/user/data/repository/user_repository_impl.dart';
 import 'package:blog_app/core/features/user/data/sources/user_remote_source.dart';
 import 'package:blog_app/core/features/user/domain/repository/user_repository.dart';

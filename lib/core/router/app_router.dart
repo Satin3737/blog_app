@@ -1,4 +1,4 @@
-import 'package:blog_app/core/common/cubits/user/app_user_cubit.dart';
+import 'package:blog_app/core/cubits/user/app_user_cubit.dart';
 import 'package:blog_app/core/router/routes.dart';
 import 'package:blog_app/core/router/widgets/route_with_nested_navigation.dart';
 import 'package:blog_app/core/utils/stream_to_listenable.dart';

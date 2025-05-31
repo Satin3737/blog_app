@@ -1,4 +1,4 @@
-import 'package:blog_app/core/common/cubits/user/app_user_cubit.dart';
+import 'package:blog_app/core/cubits/user/app_user_cubit.dart';
 import 'package:blog_app/core/features/user/domain/entities/user.dart';
 import 'package:blog_app/core/features/user/domain/usecases/user_get_data.dart';
 import 'package:blog_app/core/usecase/usecase.dart';

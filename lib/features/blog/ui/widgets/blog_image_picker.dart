@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:blog_app/core/common/widgets/image_loader.dart';
 import 'package:blog_app/core/theme/app_pallet.dart';
+import 'package:blog_app/core/widgets/image_loader.dart';
 import 'package:blog_app/features/blog/domain/entities/blog.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';

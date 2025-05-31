@@ -1,6 +1,6 @@
-import 'package:blog_app/core/common/cubits/connection/app_connection_cubit.dart';
-import 'package:blog_app/core/common/cubits/user/app_user_cubit.dart';
 import 'package:blog_app/core/constants/messages.dart';
+import 'package:blog_app/core/cubits/connection/app_connection_cubit.dart';
+import 'package:blog_app/core/cubits/user/app_user_cubit.dart';
 import 'package:blog_app/core/router/app_router.dart';
 import 'package:blog_app/core/theme/theme.dart';
 import 'package:blog_app/core/utils/snackbar_service.dart';

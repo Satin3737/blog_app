@@ -1,5 +1,5 @@
-import 'package:blog_app/core/common/widgets/loader.dart';
 import 'package:blog_app/core/utils/snackbar_service.dart';
+import 'package:blog_app/core/widgets/loader.dart';
 import 'package:blog_app/features/auth/ui/bloc/auth_bloc.dart';
 import 'package:blog_app/features/auth/ui/widgets/auth_button.dart';
 import 'package:blog_app/features/auth/ui/widgets/auth_field.dart';
