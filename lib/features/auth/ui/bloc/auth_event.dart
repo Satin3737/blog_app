@@ -5,23 +5,23 @@ sealed class AuthEvent {
   const AuthEvent();
 }
 
-final class AuthSignUpEvent extends AuthEvent {
+final class AuthSignUp extends AuthEvent {
   final String name;
   final String email;
   final String password;
 
-  const AuthSignUpEvent({
+  const AuthSignUp({
     required this.name,
     required this.email,
     required this.password,
   });
 }
 
-final class AuthSignInEvent extends AuthEvent {
+final class AuthSignIn extends AuthEvent {
   final String email;
   final String password;
 
-  const AuthSignInEvent({required this.email, required this.password});
+  const AuthSignIn({required this.email, required this.password});
 }
 
 class AuthIsCurrentUser extends AuthEvent {}

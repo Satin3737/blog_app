@@ -55,13 +55,13 @@ void _initAuth() {
       () => AuthRepositoryImpl(authRemoteSource: sl(), connectionChecker: sl()),
     )
     // usecases
-    ..registerLazySingleton<AuthSignUp>(() => AuthSignUp(sl()))
-    ..registerLazySingleton<AuthSignIn>(() => AuthSignIn(sl()))
+    ..registerLazySingleton<AuthSignUpUseCase>(() => AuthSignUpUseCase(sl()))
+    ..registerLazySingleton<AuthSignInUseCase>(() => AuthSignInUseCase(sl()))
     // bloc
     ..registerLazySingleton<AuthBloc>(
       () => AuthBloc(
-        authSignUp: sl(),
-        authSignIn: sl(),
+        authSignUpUseCase: sl(),
+        authSignInUseCase: sl(),
         userGetData: sl(),
         appUserCubit: sl(),
       ),
