@@ -4,19 +4,13 @@ import 'package:blog_app/features/blog/domain/entities/blog.dart';
 import 'package:blog_app/features/blog/domain/repository/blog_repository.dart';
 import 'package:fpdart/fpdart.dart';
 
-class BlogDelete implements UseCase<void, BlogDeleteParams> {
+class BlogsFetchUseCase implements UseCase<List<Blog>, NoParams> {
   final BlogRepository blogRepository;
 
-  const BlogDelete(this.blogRepository);
+  const BlogsFetchUseCase(this.blogRepository);
 
   @override
-  Future<Either<Failure, Blog>> call(BlogDeleteParams params) async {
-    return await blogRepository.deleteBlog(params.blog);
+  Future<Either<Failure, List<Blog>>> call(NoParams params) async {
+    return await blogRepository.fetchBlogs();
   }
-}
-
-class BlogDeleteParams {
-  final Blog blog;
-
-  const BlogDeleteParams(this.blog);
 }

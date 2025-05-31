@@ -81,17 +81,17 @@ void _initBlog() {
       ),
     )
     // usecases
-    ..registerLazySingleton<BlogsFetch>(() => BlogsFetch(sl()))
-    ..registerLazySingleton<BlogCreate>(() => BlogCreate(sl()))
-    ..registerLazySingleton<BlogEdit>(() => BlogEdit(sl()))
-    ..registerLazySingleton<BlogDelete>(() => BlogDelete(sl()))
+    ..registerLazySingleton<BlogsFetchUseCase>(() => BlogsFetchUseCase(sl()))
+    ..registerLazySingleton<BlogCreateUseCase>(() => BlogCreateUseCase(sl()))
+    ..registerLazySingleton<BlogEditUseCase>(() => BlogEditUseCase(sl()))
+    ..registerLazySingleton<BlogDeleteUseCase>(() => BlogDeleteUseCase(sl()))
     // bloc
     ..registerLazySingleton<BlogBloc>(
       () => BlogBloc(
-        blogsFetch: sl(),
-        blogCreate: sl(),
-        blogEdit: sl(),
-        blogDelete: sl(),
+        blogsFetchUseCase: sl(),
+        blogCreateUseCase: sl(),
+        blogEditUseCase: sl(),
+        blogDeleteUseCase: sl(),
       ),
     );
 }

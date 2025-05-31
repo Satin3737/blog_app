@@ -2,10 +2,10 @@ import 'dart:io';
 
 import 'package:blog_app/core/usecase/usecase.dart';
 import 'package:blog_app/features/blog/domain/entities/blog.dart';
-import 'package:blog_app/features/blog/domain/usecases/blog_create.dart';
-import 'package:blog_app/features/blog/domain/usecases/blog_delete.dart';
-import 'package:blog_app/features/blog/domain/usecases/blog_edit.dart';
-import 'package:blog_app/features/blog/domain/usecases/blogs_fetch.dart';
+import 'package:blog_app/features/blog/domain/usecases/blog_create_usecase.dart';
+import 'package:blog_app/features/blog/domain/usecases/blog_delete_usecase.dart';
+import 'package:blog_app/features/blog/domain/usecases/blog_edit_usecase.dart';
+import 'package:blog_app/features/blog/domain/usecases/blogs_fetch_usecase.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -13,20 +13,20 @@ part 'blog_event.dart';
 part 'blog_state.dart';
 
 class BlogBloc extends Bloc<BlogEvent, BlogState> {
-  final BlogsFetch _blogsFetch;
-  final BlogCreate _blogCreate;
-  final BlogEdit _blogEdit;
-  final BlogDelete _blogDelete;
+  final BlogsFetchUseCase _blogsFetchUseCase;
+  final BlogCreateUseCase _blogCreateUseCase;
+  final BlogEditUseCase _blogEditUseCase;
+  final BlogDeleteUseCase _blogDeleteUseCase;
 
   BlogBloc({
-    required BlogsFetch blogsFetch,
-    required BlogCreate blogCreate,
-    required BlogEdit blogEdit,
-    required BlogDelete blogDelete,
-  }) : _blogsFetch = blogsFetch,
-       _blogCreate = blogCreate,
-       _blogEdit = blogEdit,
-       _blogDelete = blogDelete,
+    required BlogsFetchUseCase blogsFetchUseCase,
+    required BlogCreateUseCase blogCreateUseCase,
+    required BlogEditUseCase blogEditUseCase,
+    required BlogDeleteUseCase blogDeleteUseCase,
+  }) : _blogsFetchUseCase = blogsFetchUseCase,
+       _blogCreateUseCase = blogCreateUseCase,
+       _blogEditUseCase = blogEditUseCase,
+       _blogDeleteUseCase = blogDeleteUseCase,
        super(const BlogState()) {
     on<BlogEvent>(_onLoadingStarted);
     on<BlogsFetched>(_onBlogsFetched);
@@ -41,7 +41,7 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
 
   void _onBlogsFetched(BlogsFetched event, Emitter<BlogState> emit) async {
     try {
-      final response = await _blogsFetch(NoParams());
+      final response = await _blogsFetchUseCase(NoParams());
 
       response.fold(
         (failure) => emit(
@@ -57,7 +57,7 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
 
   void _onBlogCreated(BlogCreated event, Emitter<BlogState> emit) async {
     try {
-      final response = await _blogCreate(
+      final response = await _blogCreateUseCase(
         BlogCreateParams(
           image: event.image,
           title: event.title,
@@ -89,7 +89,7 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
 
   void _onBlogEdited(BlogEdited event, Emitter<BlogState> emit) async {
     try {
-      final response = await _blogEdit(
+      final response = await _blogEditUseCase(
         BlogEditParams(
           id: event.id,
           title: event.title,
@@ -126,7 +126,7 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
 
   void _onBlogDeleted(BlogDeleted event, Emitter<BlogState> emit) async {
     try {
-      final response = await _blogDelete(BlogDeleteParams(event.blog));
+      final response = await _blogDeleteUseCase(BlogDeleteParams(event.blog));
 
       response.fold(
         (failure) => emit(

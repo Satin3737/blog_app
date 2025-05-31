@@ -6,35 +6,44 @@ import 'package:blog_app/features/blog/domain/entities/blog.dart';
 import 'package:blog_app/features/blog/domain/repository/blog_repository.dart';
 import 'package:fpdart/fpdart.dart';
 
-class BlogCreate implements UseCase<Blog, BlogCreateParams> {
+class BlogEditUseCase implements UseCase<void, BlogEditParams> {
   final BlogRepository blogRepository;
 
-  const BlogCreate(this.blogRepository);
+  const BlogEditUseCase(this.blogRepository);
 
   @override
-  Future<Either<Failure, Blog>> call(BlogCreateParams params) async {
-    return await blogRepository.createBlog(
-      image: params.image,
+  Future<Either<Failure, Blog>> call(BlogEditParams params) async {
+    return await blogRepository.editBlog(
+      id: params.id,
       title: params.title,
       content: params.content,
       topics: params.topics,
       authorId: params.authorId,
+      image: params.image,
+      oldImage: params.oldImage,
+      authorName: params.authorName,
     );
   }
 }
 
-class BlogCreateParams {
-  final File image;
+class BlogEditParams {
+  final String id;
   final String title;
   final String content;
   final List<String> topics;
   final String authorId;
+  final File? image;
+  final String? oldImage;
+  final String? authorName;
 
-  const BlogCreateParams({
-    required this.image,
+  const BlogEditParams({
+    required this.id,
     required this.title,
     required this.content,
     required this.topics,
     required this.authorId,
+    this.image,
+    this.oldImage,
+    this.authorName,
   });
 }
