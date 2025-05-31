@@ -9,6 +9,7 @@ import 'package:blog_app/features/blog/domain/entities/blog.dart';
 import 'package:blog_app/features/blog/ui/pages/blog_page.dart';
 import 'package:blog_app/features/blog/ui/pages/manage_blog_page.dart';
 import 'package:blog_app/features/blog/ui/pages/single_blog_page.dart';
+import 'package:blog_app/features/profile/ui/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -59,9 +60,7 @@ final GoRouter appRouter = GoRouter(
           routes: [
             GoRoute(
               path: Routes.profile,
-              builder: (context, state) {
-                return Scaffold(body: const Center(child: Text('Profile')));
-              },
+              builder: (context, state) => const ProfilePage(),
             ),
           ],
         ),

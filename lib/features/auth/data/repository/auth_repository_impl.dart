@@ -1,12 +1,10 @@
-import 'package:blog_app/core/common/entities/user.dart';
 import 'package:blog_app/core/constants/messages.dart';
 import 'package:blog_app/core/error/exceptions.dart';
 import 'package:blog_app/core/error/failures.dart';
+import 'package:blog_app/core/features/user/domain/entities/user.dart';
 import 'package:blog_app/core/utils/connection_checker.dart';
-import 'package:blog_app/features/auth/data/models/user_model.dart';
 import 'package:blog_app/features/auth/data/sources/auth_remote_source.dart';
 import 'package:blog_app/features/auth/domain/repository/auth_repository.dart';
-import 'package:blog_app/features/auth/interfaces/interfaces.dart';
 import 'package:fpdart/fpdart.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
@@ -19,7 +17,7 @@ class AuthRepositoryImpl implements AuthRepository {
   });
 
   @override
-  AsyncUserResult signUpWithEmailAndPassword({
+  Future<Either<Failure, User>> signUpWithEmailAndPassword({
     required String name,
     required String email,
     required String password,
@@ -34,7 +32,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  AsyncUserResult signInWithEmailAndPassword({
+  Future<Either<Failure, User>> signInWithEmailAndPassword({
     required String email,
     required String password,
   }) async {
@@ -46,25 +44,9 @@ class AuthRepositoryImpl implements AuthRepository {
     );
   }
 
-  @override
-  AsyncUserResult getCurrentUserData() async {
-    try {
-      if (!connectionChecker.isConnected) {
-        final session = authRemoteSource.currentSession;
-        if (session == null) return Left(Failure(Messages.noConnectionError));
-        final user = session.user;
-        return Right(UserModel(id: user.id, email: user.email ?? '', name: ''));
-      }
-
-      final user = await authRemoteSource.getCurrentUserData();
-      if (user == null) return Left(Failure(Messages.noUserError));
-      return Right(user);
-    } on ServerException catch (e) {
-      return Left(Failure(e.message));
-    }
-  }
-
-  AsyncUserResult _getUser(Future<User> Function() userRequest) async {
+  Future<Either<Failure, User>> _getUser(
+    Future<User> Function() userRequest,
+  ) async {
     try {
       if (!connectionChecker.isConnected) {
         return Left(Failure(Messages.noConnectionError));

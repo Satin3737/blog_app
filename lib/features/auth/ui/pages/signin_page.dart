@@ -22,7 +22,7 @@ class _SignInPageState extends State<SignInPage> {
   void _onSubmit() {
     if (_formKey.currentState!.validate()) {
       context.read<AuthBloc>().add(
-        AuthSignIn(
+        AuthSignInEvent(
           email: _emailController.text.trim(),
           password: _passwordController.text.trim(),
         ),

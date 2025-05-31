@@ -5,6 +5,7 @@ final GetIt sl = GetIt.instance;
 Future<void> initDependencies() async {
   await _initBase();
   _initCore();
+  _initUser();
   _initAuth();
   _initBlog();
 }
@@ -29,6 +30,23 @@ void _initCore() {
     ..registerLazySingleton<AppUserCubit>(() => AppUserCubit());
 }
 
+// core features
+
+void _initUser() {
+  sl
+    // repository
+    ..registerLazySingleton<UserRemoteSource>(() => UserRemoteSourceImpl(sl()))
+    ..registerLazySingleton<UserRepository>(
+      () => UserRepositoryImpl(userRemoteSource: sl(), connectionChecker: sl()),
+    )
+    // usecases
+    ..registerLazySingleton<UserGetData>(() => UserGetData(sl()))
+    ..registerLazySingleton<UserSignOut>(() => UserSignOut(sl()));
+  // bloc
+}
+
+// features
+
 void _initAuth() {
   sl
     // repository
@@ -37,15 +55,14 @@ void _initAuth() {
       () => AuthRepositoryImpl(authRemoteSource: sl(), connectionChecker: sl()),
     )
     // usecases
-    ..registerLazySingleton<UserSignUp>(() => UserSignUp(sl()))
-    ..registerLazySingleton<UserSignIn>(() => UserSignIn(sl()))
-    ..registerLazySingleton<CurrentUser>(() => CurrentUser(sl()))
+    ..registerLazySingleton<AuthSignUp>(() => AuthSignUp(sl()))
+    ..registerLazySingleton<AuthSignIn>(() => AuthSignIn(sl()))
     // bloc
     ..registerLazySingleton<AuthBloc>(
       () => AuthBloc(
-        userSignUp: sl(),
-        userSignIn: sl(),
-        currentUser: sl(),
+        authSignUp: sl(),
+        authSignIn: sl(),
+        userGetData: sl(),
         appUserCubit: sl(),
       ),
     );
