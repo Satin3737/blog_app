@@ -13,17 +13,17 @@ part 'auth_state.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthSignUpUseCase _authSignUpUseCase;
   final AuthSignInUseCase _authSignInUseCase;
-  final UserGetData _userGetData;
+  final UserGetDataUseCase _userGetDataUseCase;
   final AppUserCubit _appUserCubit;
 
   AuthBloc({
     required AuthSignUpUseCase authSignUpUseCase,
     required AuthSignInUseCase authSignInUseCase,
-    required UserGetData userGetData,
+    required UserGetDataUseCase userGetDataUseCase,
     required AppUserCubit appUserCubit,
   }) : _authSignUpUseCase = authSignUpUseCase,
        _authSignInUseCase = authSignInUseCase,
-       _userGetData = userGetData,
+       _userGetDataUseCase = userGetDataUseCase,
        _appUserCubit = appUserCubit,
        super(AuthInitial()) {
     on<AuthEvent>((_, emit) => emit(AuthLoading()));
@@ -64,7 +64,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async {
     emit(AuthCurrentUserLoading());
 
-    final response = await _userGetData(NoParams());
+    final response = await _userGetDataUseCase(NoParams());
 
     response.fold(
       (failure) => emit(AuthFailure(failure.message)),

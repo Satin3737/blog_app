@@ -40,8 +40,8 @@ void _initUser() {
       () => UserRepositoryImpl(userRemoteSource: sl(), connectionChecker: sl()),
     )
     // usecases
-    ..registerLazySingleton<UserGetData>(() => UserGetData(sl()))
-    ..registerLazySingleton<UserSignOut>(() => UserSignOut(sl()));
+    ..registerLazySingleton<UserGetDataUseCase>(() => UserGetDataUseCase(sl()))
+    ..registerLazySingleton<UserSignOutUseCase>(() => UserSignOutUseCase(sl()));
   // bloc
 }
 
@@ -62,7 +62,7 @@ void _initAuth() {
       () => AuthBloc(
         authSignUpUseCase: sl(),
         authSignInUseCase: sl(),
-        userGetData: sl(),
+        userGetDataUseCase: sl(),
         appUserCubit: sl(),
       ),
     );
