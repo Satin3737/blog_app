@@ -1,7 +1,6 @@
 import 'package:blog_app/core/features/user/domain/entities/user.dart';
-import 'package:blog_app/core/features/user/domain/usecases/user_get_data.dart';
+import 'package:blog_app/core/features/user/domain/usecases/user_get_data_usecase.dart';
 import 'package:blog_app/core/features/user/ui/bloc/user_cubit.dart';
-import 'package:blog_app/core/usecase/usecase.dart';
 import 'package:blog_app/features/auth/domain/usecases/auth_signin_usecase.dart';
 import 'package:blog_app/features/auth/domain/usecases/auth_signup_usecase.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +12,6 @@ part 'auth_state.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthSignUpUseCase _authSignUpUseCase;
   final AuthSignInUseCase _authSignInUseCase;
-  final UserGetDataUseCase _userGetDataUseCase;
   final UserCubit _userCubit;
 
   AuthBloc({
@@ -23,13 +21,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required UserCubit userCubit,
   }) : _authSignUpUseCase = authSignUpUseCase,
        _authSignInUseCase = authSignInUseCase,
-       _userGetDataUseCase = userGetDataUseCase,
        _userCubit = userCubit,
        super(AuthInitial()) {
     on<AuthEvent>((_, emit) => emit(AuthLoading()));
     on<AuthSignUp>(_onSignUp);
     on<AuthSignIn>(_onSignIn);
-    on<AuthIsCurrentUser>(_onIsCurrentUser);
   }
 
   void _onSignUp(AuthSignUp event, Emitter<AuthState> emit) async {
@@ -58,22 +54,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     );
   }
 
-  void _onIsCurrentUser(
-    AuthIsCurrentUser event,
-    Emitter<AuthState> emit,
-  ) async {
-    emit(AuthCurrentUserLoading());
-
-    final response = await _userGetDataUseCase(NoParams());
-
-    response.fold(
-      (failure) => emit(AuthFailure(failure.message)),
-      (user) => _emitAuthSuccess(user, emit),
-    );
-  }
-
   void _emitAuthSuccess(User user, Emitter<AuthState> emit) {
-    _userCubit.updateUser(user);
+    _userCubit.getUser();
     emit(AuthSuccess(user));
   }
 }

@@ -24,7 +24,7 @@ class BlogOptionsMenu extends StatelessWidget {
 
     return BlocBuilder<UserCubit, UserState>(
       builder: (context, state) {
-        if ((state as UserLoggedIn).user.id == blog.authorId) {
+        if (state is UserSuccess && state.user.id == blog.authorId) {
           return Positioned(
             bottom: 0,
             right: 0,

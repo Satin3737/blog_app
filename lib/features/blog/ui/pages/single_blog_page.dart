@@ -41,7 +41,7 @@ class SingleBlogPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'By ${blog.authorName}',
+                    'By ${blog.authorName ?? 'Unknown'}',
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,

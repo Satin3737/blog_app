@@ -33,8 +33,16 @@ class UserRepositoryImpl implements UserRepository {
       if (!connectionChecker.isConnected) {
         final session = userRemoteSource.currentSession;
         if (session == null) return Left(Failure(Messages.noConnectionError));
-        final user = session.user;
-        return Right(UserModel(id: user.id, email: user.email ?? '', name: ''));
+
+        final rawUser = session.user;
+
+        final user = UserModel(
+          id: rawUser.id,
+          email: rawUser.userMetadata?['email'] ?? '',
+          name: rawUser.userMetadata?['name'] ?? '',
+        );
+
+        return Right(user);
       }
 
       final user = await userRemoteSource.getUserData();

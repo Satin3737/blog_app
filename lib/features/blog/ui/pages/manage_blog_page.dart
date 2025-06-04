@@ -85,18 +85,20 @@ class _ManageBlogPageState extends State<ManageBlogPage> {
         ),
       );
     } else {
-      final authorId =
-          (context.read<UserCubit>().state as UserLoggedIn).user.id;
+      final userState = context.read<UserCubit>().state;
+      if (userState is UserSuccess) {
+        final authorId = userState.user.id;
 
-      context.read<BlogBloc>().add(
-        BlogCreated(
-          image: _selectedImage!,
-          title: _titleController.text.trim(),
-          content: _contentController.text.trim(),
-          topics: _selectedTopics,
-          authorId: authorId,
-        ),
-      );
+        context.read<BlogBloc>().add(
+          BlogCreated(
+            image: _selectedImage!,
+            title: _titleController.text.trim(),
+            content: _contentController.text.trim(),
+            topics: _selectedTopics,
+            authorId: authorId,
+          ),
+        );
+      }
     }
   }
 

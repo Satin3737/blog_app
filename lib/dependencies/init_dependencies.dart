@@ -20,14 +20,18 @@ Future<void> _initBase() async {
 
   sl
     ..registerLazySingleton<SupabaseClient>(() => supabase.client)
-    ..registerLazySingleton<Box>(() => Hive.box(name: Tables.blogs));
+    ..registerLazySingleton<Box>(() => Hive.box(name: Tables.blogs))
+    ..registerLazySingleton<ConnectionChecker>(() => ConnectionChecker());
+
+  await sl<ConnectionChecker>().initializeConnectivityStatus();
 }
 
 void _initCore() {
   sl
-    ..registerLazySingleton<ConnectionChecker>(() => ConnectionChecker())
     ..registerLazySingleton<AppConnectionCubit>(() => AppConnectionCubit(sl()))
-    ..registerLazySingleton<UserCubit>(() => UserCubit());
+    ..registerLazySingleton<UserCubit>(
+      () => UserCubit(userGetDataUseCase: sl(), userSignOutUseCase: sl()),
+    );
 }
 
 // core features

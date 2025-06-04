@@ -27,8 +27,6 @@ class UserRemoteSourceImpl implements UserRemoteSource {
   @override
   Future<UserModel?> getUserData() async {
     try {
-      if (currentSession == null) return null;
-
       final userData =
           await supabaseClient
               .from(Tables.users)

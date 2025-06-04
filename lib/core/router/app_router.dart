@@ -5,6 +5,7 @@ import 'package:blog_app/core/utils/stream_to_listenable.dart';
 import 'package:blog_app/dependencies/dependencies.dart';
 import 'package:blog_app/features/auth/ui/pages/signin_page.dart';
 import 'package:blog_app/features/auth/ui/pages/signup_page.dart';
+import 'package:blog_app/features/auth/ui/pages/splash_page.dart';
 import 'package:blog_app/features/blog/domain/entities/blog.dart';
 import 'package:blog_app/features/blog/ui/pages/blog_page.dart';
 import 'package:blog_app/features/blog/ui/pages/manage_blog_page.dart';
@@ -18,9 +19,13 @@ final _shellNavigatorBlogKey = GlobalKey<NavigatorState>();
 final _shellNavigatorProfileKey = GlobalKey<NavigatorState>();
 
 final GoRouter appRouter = GoRouter(
-  initialLocation: Routes.signIn,
+  initialLocation: Routes.splash,
   navigatorKey: _rootNavigatorKey,
   routes: <RouteBase>[
+    GoRoute(
+      path: Routes.splash,
+      builder: (context, state) => const SplashPage(),
+    ),
     GoRoute(
       path: Routes.signIn,
       builder: (context, state) => const SignInPage(),
@@ -69,12 +74,15 @@ final GoRouter appRouter = GoRouter(
   ],
   refreshListenable: StreamToListenable([sl<UserCubit>().stream]),
   redirect: (context, state) {
-    final isUser = sl<UserCubit>().state is UserLoggedIn;
     final route = state.uri.path;
-    final isAuthPages = route == Routes.signIn || route == Routes.signUp;
+    final userState = sl<UserCubit>().state;
+    final isUser = userState is UserSuccess;
 
-    if (isUser && isAuthPages) return Routes.blog;
-    if (!isUser && !isAuthPages) return Routes.signIn;
+    final isAuthPages = route == Routes.signIn || route == Routes.signUp;
+    final isSplashPage = route == Routes.splash;
+
+    if (!isUser && !isAuthPages && !isSplashPage) return Routes.signIn;
+    if (isUser && (isSplashPage || isAuthPages)) return Routes.blog;
 
     return null;
   },

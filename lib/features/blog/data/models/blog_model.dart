@@ -34,11 +34,12 @@ class BlogModel extends Blog {
       imageUrl: json['image_url'] ?? '',
       topics: List<String>.from(json['topics'] ?? []),
       updatedAt: DateTime.parse(json['updated_at'] ?? DateTime.now()),
+      authorName: json['author_name'],
     );
   }
 
   Map<String, dynamic> toJson() {
-    return {
+    final json = {
       'id': id,
       'author_id': authorId,
       'title': title,
@@ -47,6 +48,12 @@ class BlogModel extends Blog {
       'topics': topics,
       'updated_at': updatedAt.toIso8601String(),
     };
+
+    if (authorName != null) {
+      json['author_name'] = authorName as String;
+    }
+
+    return json;
   }
 
   BlogModel copyWith({

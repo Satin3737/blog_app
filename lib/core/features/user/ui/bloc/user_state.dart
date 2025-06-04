@@ -7,8 +7,14 @@ sealed class UserState {
 
 final class UserInitial extends UserState {}
 
-final class UserLoggedIn extends UserState {
+final class UserSuccess extends UserState {
   final User user;
 
-  const UserLoggedIn(this.user);
+  const UserSuccess(this.user);
+}
+
+final class UserFailure extends UserState {
+  final String message;
+
+  const UserFailure(this.message);
 }

@@ -101,7 +101,6 @@ class BlogRepositoryImpl implements BlogRepository {
         imageUrl: '',
         topics: topics,
         updatedAt: DateTime.now(),
-        authorName: authorName,
       );
 
       String imageUrl = oldImage ?? '';
